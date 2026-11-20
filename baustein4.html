@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baustein 4: Warum werden Ionen gebildet?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a> · <a href="wissenscheck.html">Wissenscheck</a></p>
+<h1>Baustein 4: Warum werden Ionen gebildet?</h1>
+<p class="sub">Ich kann die Oktettregel anwenden und die Bildung eines Ions mit der Edelgaskonfiguration erläutern.</p>
+
+<section class="card merke">
+<h2>Merke</h2>
+<p>Edelgase sind sehr reaktionsträge. Sie haben eine <b>voll besetzte Außenschale</b>: Helium 2 e<sup>−</sup> (Duett), Neon und Argon 8 e<sup>−</sup> (Oktett). Diesen Zustand nennt man <b>Edelgaskonfiguration</b>. Teilchen mit Edelgaskonfiguration sind besonders stabil.</p>
+<div class="pair" id="egfig"></div>
+<p><b>Oktettregel:</b> Bei der Ionenbildung erreichen Atome der Hauptgruppen durch Abgabe oder Aufnahme von e<sup>−</sup> meist eine Außenschale mit 8 e<sup>−</sup> (bei Lithium und Beryllium mit 2 e<sup>−</sup>). Es wird der Weg mit den wenigsten übertragenen e<sup>−</sup> gewählt.</p>
+</section>
+
+<details class="card" open>
+<summary>Beispiel vorgerechnet: Natrium</summary>
+<ol>
+<li>Natrium hat 1 Valenzelektron. Abgabe von 1 e<sup>−</sup> führt zur Konfiguration von Neon, Aufnahme von 7 e<sup>−</sup> zu der von Argon. Die <b>Abgabe</b> ist der kürzere Weg.</li>
+<li>Das Ion hat die <b>Edelgaskonfiguration von Neon</b> (2 | 8).</li>
+<li>Die äußerste Schale des Ions trägt <b>8 e<sup>−</sup></b>: ein Oktett.</li>
+<li>Satz: Ein Natrium-Atom gibt 1 Elektron ab. Dabei entsteht ein Kation mit der Edelgaskonfiguration von Neon und einer voll besetzten Außenschale. Deshalb ist es besonders stabil.</li>
+</ol>
+<div class="pair" id="exfig"></div>
+</details>
+
+<section class="card" id="task"></section>
+<nav class="navbot"><a href="baustein3.html">← Baustein 3: Atom oder Ion?</a><a href="baustein5.html">Baustein 5: Elektronen abgeben und aufnehmen im Modell →</a></nav>
+</main>
+
+<script>
+const R=[["H","","","","","","","He"],["Li","Be","B","C","N","O","F","Ne"],["Na","Mg","Al","Si","P","S","Cl","Ar"],["K","Ca","Ga","Ge","As","Se","Br","Kr"]];
+const Z={He:2,Ne:10,Ar:18,Li:3,Na:11,Mg:12,Cl:17,O:8,Ca:20};
+const RO=["I","II","III","IV","V","VI","VII","VIII"];
+const EGN={He:"Helium",Ne:"Neon",Ar:"Argon"};
+const E="e<sup>−</sup>",P="p<sup>+</sup>",AMB="#e39b13";
+const cfg=n=>{const o=[];let r=n;for(const c of [2,8,8,18]){if(r<=0)break;const m=Math.min(c,r);o.push(m);r-=m}return o};
+const last=a=>a[a.length-1];
+const mk=(n,s)=>{
+ const r=R.findIndex((row,i)=>i>0&&row.includes(s)),c=R[r].indexOf(s),z=Z[s],ve=last(cfg(z)),back=ve,fwd=8-ve,don=back<fwd,k=Math.min(back,fwd);
+ const egL=["He","Ne","Ar"][r-1],egR=R[r][7],eg=don?egL:egR,ch=don?k:-k;
+ return{n,s,r,c,z,ve,back,fwd,don,k,egL,egR,eg,ch,y:z-ch,out:last(cfg(z-ch))};
+};
+const T=[["Lithium","Li"],["Magnesium","Mg"],["Chlor","Cl"],["Sauerstoff","O"],["Calcium","Ca"]].map(a=>mk(...a));
+const SK=[
+ ["Den kürzeren Weg (Abgabe oder Aufnahme) bestimmen","AB 3, Aufgabe 1"],
+ ["Die Edelgaskonfiguration des Ions bestimmen","AB 3, Aufgabe 1; AB 4, Aufgabe 1"],
+ ["Oktett und Duett: Außenschale des Ions","AB 3, Aufgabe 1; AB 4, Aufgabe 1"],
+ ["Die Ionenbildung begründen (Lückentext)","AB 2; AB 4, Aufgabe 1"]
+];
+const ion=t=>`${t.s}<sup>${t.k>1?t.k:""}${t.ch>0?"+":"−"}</sup>`;
+const nums=a=>a.map(v=>({l:v,v}));
+const rot=(a,i)=>a.map((_,j)=>a[(j+i)%a.length]);
+
+function fig(z,e,o={}){
+ const sh=cfg(e),ns=sh.length,cx=85,cy=85;
+ let h=`<circle cx="${cx}" cy="${cy}" r="18" fill="var(--pro)"/><text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const rad=30+16*i,lst=i===ns-1,gh=lst&&o.ghost?o.ghost:0,m=n+gh,dsh=lst&&o.dash;
+  h+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${dsh?AMB:"var(--mut)"}" stroke-opacity="${dsh?1:.45}" stroke-width="${dsh?2.5:1.5}" ${dsh?'stroke-dasharray="5 4"':""}/>`;
+  for(let j=0;j<m;j++){
+   const a=-Math.PI/2+j*2*Math.PI/m+(i%2?Math.PI/m:0),x=(cx+rad*Math.cos(a)).toFixed(1),y=(cy+rad*Math.sin(a)).toFixed(1);
+   if(j<n){const hi=lst&&o.hi&&j>=n-o.hi;h+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${hi?AMB:"var(--ele)"}" stroke="var(--card)" stroke-width="1"/>`}
+   else h+=`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+  }
+ });
+ return `<figure><svg viewBox="0 0 170 170" role="img" aria-label="Schalenmodell"><title>Schalenmodell</title>${h}</svg><figcaption>${o.cap||""}</figcaption></figure>`;
+}
+function ex(t,showN){
+ let h=`<div class="scroll"><table class="ex"><tr><th></th>${RO.map(r=>`<th>${r}</th>`).join("")}</tr>`;
+ [[t.r-1,0],[t.r,1]].forEach(([ri,cur])=>{
+  h+=`<tr><th class="pl">Periode ${ri+1}<br>${ri+1} Schalen</th>`;
+  R[ri].forEach((x,j)=>{
+   let cl=!x?"e0":j===7?"eg":"",b="";
+   if(cur&&j===t.c)cl="cur";
+   if(j===7&&x)cl+=" tg";
+   if(showN&&x){if(cur&&j<t.c)b=`←${t.c-j}`;if(cur&&j>t.c)b=`${j-t.c}→`;if(!cur&&j===7)b=`↖${t.back}`}
+   h+=`<td class="${cl}">${x}<small>${b}</small></td>`;
+  });
+  h+="</tr>";
+ });
+ return h+`</table></div><p class="note">Abgabe von ${E} führt zum Edelgas der Periode darüber (eine Schale weniger), Aufnahme von ${E} zum Edelgas der eigenen Periode.${showN?" Die Zahlen zählen die Schritte vom Element aus.":""}</p>`;
+}
+const atomFig=(t,cap)=>fig(t.z,t.z,t.don?{hi:t.k,dash:1,cap}:{ghost:t.k,cap});
+function trio(t){
+ const w=t.don?"abgegeben":"aufgenommen",n=x=>cfg(x).length;
+ const a=atomFig(t,`${t.n}-Atom<br>${n(t.z)} Schalen`);
+ const b=fig(t.z,t.y,{hi:t.don?0:t.k,cap:`${ion(t)}-Ion<br>${n(t.y)} Schalen`});
+ const c=fig(Z[t.eg],Z[t.eg],{cap:`${EGN[t.eg]}<br>${n(Z[t.eg])} Schalen`});
+ return `<div class="pair">${a}<div class="mid">→<small>${t.k} ${E} ${w}</small></div>${b}<div class="mid">=<small>gleiche Elektronen&shy;anordnung</small></div>${c}</div>`;
+}
+
+function cloze(t,i){
+ const w=t.don?["gibt","ab"]:["nimmt","auf"],en=EGN[t.eg];
+ const gaps=[
+  {ok:"Elektronen",o:["Elektronen","Protonen","Neutronen"]},
+  {ok:t.don?"Kation":"Anion",o:["Kation","Anion","Atom"]},
+  {ok:en,o:["Helium","Neon","Argon"]},
+  {ok:"Außenschale",o:["Außenschale","Innenschale","Atomkern"]},
+  {ok:"stabil",o:["stabil","reaktionsfreudig","radioaktiv"]}
+ ].map((g,j)=>({ok:g.ok,o:rot(g.o,(i+j)%3)}));
+ const parts=[`Ein ${t.n}-Atom ${w[0]} ${t.k} `,` ${w[1]}. Dabei entsteht ein `,`, also ein ${t.don?"positiv":"negativ"} geladenes Ion. Das Ion hat die Edelgaskonfiguration von `,` und eine voll besetzte `,`. Deshalb ist es besonders `,`.`];
+ const full=parts.map((p,j)=>p+(j<5?gaps[j].ok:"")).join("");
+ return{nm:"Begründung",cloze:true,gaps,parts,q:"Ergänze den Satz mit den Wörtern aus der Auswahl.",
+  tips:[`Lies den Satz Schritt für Schritt. Was wird bei der Ionenbildung übertragen, und was bleibt im Kern?`,
+        `Abgabe von Elektronen ergibt ein Kation, Aufnahme ein Anion. Das Edelgas kennst du aus Schritt 2.`,
+        `Beispiel Natrium: Ein Natrium-Atom gibt 1 Elektron ab. Dabei entsteht ein Kation mit der Edelgaskonfiguration von Neon und einer voll besetzten Außenschale. Deshalb ist es besonders stabil.`],
+  sol:full,done:`Richtig: ${full}`,
+  badGap:[`Bei der Ionenbildung werden nur Elektronen übertragen. Die Protonen im Kern bleiben unverändert.`,
+          `Prüfe das Vorzeichen: ${t.don?"Abgabe von Elektronen ergibt ein Kation":"Aufnahme von Elektronen ergibt ein Anion"}.`,
+          `Das Ion hat die Konfiguration des Edelgases, das du in Schritt 2 bestimmt hast.`,
+          `Gemeint ist die äußerste besetzte Schale.`,
+          `Teilchen mit Edelgaskonfiguration sind besonders stabil.`]};
+}
+function steps(t,i){
+ const eg=EGN[t.eg],egl=EGN[t.egL],egr=EGN[t.egR],pr=t.r+1,ve=t.ve;
+ return[
+ {nm:"Abgabe oder Aufnahme?",q:`Was ist für ${t.n} der kürzere Weg zu einer Edelgaskonfiguration?`,wide:true,ok:t.don?"d":"a",
+  opts:rot([{l:`Abgabe von ${t.back} ${E} (Konfiguration von ${egl})`,v:"d"},{l:`Aufnahme von ${t.fwd} ${E} (Konfiguration von ${egr})`,v:"a"}],i),
+  tips:[`Vergleiche, wie viele ${E} in beiden Fällen übertragen werden müssten. Die kleinere Zahl ist der kürzere Weg.`,
+        `Mit diesem Tipp erscheint der PSE-Ausschnitt mit den Schritten. Welche Zahl ist kleiner?`,
+        `Beispiel Natrium: Abgabe von 1 ${E} führt zu Neon, Aufnahme von 7 ${E} zu Argon. Die Abgabe ist der kürzere Weg.`],
+  sol:`Abgabe: ${t.back} ${E}, Aufnahme: ${t.fwd} ${E}. Der kürzere Weg ist die ${t.don?"Abgabe":"Aufnahme"}.`,
+  bad:()=>`Das ist der längere Weg: Dafür müssten mehr ${E} übertragen werden.`,
+  done:`Richtig: ${t.don?`Abgabe von ${t.k} ${E}`:`Aufnahme von ${t.k} ${E}`} ist der kürzere Weg.`},
+ {nm:"Edelgaskonfiguration",q:`Welche Edelgaskonfiguration hat das ${t.n}-Ion nach ${t.don?"der Abgabe":"der Aufnahme"} von ${t.k} ${E}?`,ok:t.eg,
+  opts:rot(["He","Ne","Ar"].map(x=>({l:EGN[x],v:x})),i),
+  tips:[`Bei der Abgabe liegt das Edelgas in der Periode darüber, bei der Aufnahme in der eigenen Periode.`,
+        `Mit diesem Tipp erscheint der PSE-Ausschnitt. Suche das Edelgas in der richtigen Periode.`,
+        `Beispiel Natrium (Periode 3, Abgabe): Das Edelgas steht in Periode 2: Neon.`],
+  sol:`${t.don?`Bei der Abgabe liegt das Edelgas in Periode ${t.r}`:`Bei der Aufnahme liegt es in Periode ${pr}`}: ${eg}.`,
+  bad:v=>`${EGN[v]} wäre ein anderer Weg. Bei ${t.don?"der Abgabe":"der Aufnahme"} gilt: ${t.don?`Das Edelgas steht in der Periode darüber (Periode ${t.r}).`:`Das Edelgas steht in der eigenen Periode (Periode ${pr}).`}`,
+  done:`Richtig: Das Ion hat die Edelgaskonfiguration von ${eg}.`},
+ {nm:"Außenschale des Ions",q:`Wie viele ${E} hat die äußerste Schale des ${t.n}-Ions? Es hat die Edelgaskonfiguration von ${eg}.`,opts:nums([1,2,6,7,8]),ok:t.out,
+  tips:[`Das Ion hat die Elektronenanordnung von ${eg}. Sieh dir dessen äußerste Schale an.`,
+        `Edelgase außer Helium haben 8 ${E} auf der äußersten Schale (Oktett). Helium hat nur 2 ${E} (Duett), weil die erste Schale nicht mehr fasst. Mit diesem Tipp erscheinen die Schalenmodelle.`,
+        `Beispiel Natrium: Das Ion hat die Konfiguration von Neon (2 | 8). Die äußerste Schale trägt 8 ${E}.`],
+  sol:`Das Ion hat die Anordnung ${cfg(t.y).join(" | ")}: ${t.out} ${E} auf der äußersten Schale.`,
+  bad:v=>t.out===2&&v===8?`Die erste Schale fasst höchstens 2 ${E}. ${eg} hat ein Duett: 2 ${E}.`:(v===ve?`Das sind die Valenzelektronen des Atoms. Gefragt ist die äußerste Schale des Ions.`:`Das stimmt noch nicht. Sieh dir die Schalenbesetzung von ${eg} an: ${cfg(Z[t.eg]).join(" | ")}.`),
+  done:t.out===2?`Richtig: ${t.out} ${E}, ein Duett wie bei Helium.`:`Richtig: ${t.out} ${E}, ein Oktett.`},
+ cloze(t,i)
+ ];
+}
+
+let ti=0,s=0,hint=0,solved=false,fb=null,over=false,end=false,picked=null,ans=[],sel=[],chk=[],err=T.map(()=>[false,false,false,false]);
+
+function gfx(t){
+ const h1=hint>=1||solved,h2=hint>=2||solved;
+ if(s===0&&h2)return ex(t,true);
+ if(s===1&&h2)return ex(t,false);
+ if(s===2&&h2)return `<div class="pair">${atomFig(t,`${t.n}-Atom`)}<div class="mid">→<small>${t.k} ${E} ${t.don?"abgegeben":"aufgenommen"}</small></div>${fig(t.z,t.y,{hi:t.out,cap:`${ion(t)}<br>${cfg(t.y).join(" | ")}`})}<div class="mid">=</div>${fig(Z[t.eg],Z[t.eg],{hi:t.out,cap:`${EGN[t.eg]}<br>${cfg(Z[t.eg]).join(" | ")}`})}</div><p class="note">Orange beim Ion und beim Edelgas: die ${E} der äußersten Schale. Orange beim Atom: die übertragenen ${E}.</p>`;
+ if(s===3&&solved)return trio(t)+`<p class="note">Das Ion hat die Edelgaskonfiguration von ${EGN[t.eg]}, aber eine andere Zahl an ${P}.</p>`;
+ return "";
+}
+function clozeHtml(c){
+ let h='<p class="cloze">';
+ c.parts.forEach((p,j)=>{
+  h+=p;
+  if(j<5){const cl=chk[j]===true?"right":chk[j]===false?"wrong":"";
+   h+=`<select class="${cl}" ${solved?"disabled":""} onchange="setSel(${j},this.value)"><option value="">…</option>`+c.gaps[j].o.map(x=>`<option ${sel[j]===x?"selected":""}>${x}</option>`).join("")+"</select>"}
+ });
+ return h+"</p>";
+}
+function render(){
+ const el=document.getElementById("task");
+ if(end)return result(el);
+ const t=T[ti],S=steps(t,ti);
+ let h=`<h2>Aufgabe ${ti+1} von ${T.length}: ${t.n}</h2><div class="chips">${S.map((x,i)=>`<span class="chip ${over||i<s?"done":i===s?"cur":""}">${x.nm}</span>`).join("")}</div>`;
+ ans.forEach(a=>h+=`<p class="recap">✓ ${a}</p>`);
+ if(over){
+  h+=`<div class="fb ok"><b>Steckbrief: ${ion(t)}-Ion</b>${trio(t)}<div class="fx">${t.n}-Atom: ${t.z} ${P}, ${t.z} ${E}<br>${ion(t)}: ${t.z} ${P}, ${t.y} ${E}<br>Außenschale: ${t.out} ${E} (${t.out===2?"Duett":"Oktett"})<br>Edelgaskonfiguration von ${EGN[t.eg]}</div></div>
+  <div class="row"><button class="main" onclick="nextTask()">${ti<T.length-1?"Nächste Aufgabe":"Auswertung ansehen"}</button></div>`;
+  el.innerHTML=h;return;
+ }
+ const c=S[s];
+ h+=`<p class="q">${c.q}</p>`+gfx(t);
+ if(c.cloze)h+=clozeHtml(c);
+ else h+=`<div class="opts ${c.wide?"w":""}">`+c.opts.map((o,i)=>{
+   const cl=solved&&o.v===c.ok?"right":(picked===i&&!solved&&o.v!==c.ok)?"wrong":"";
+   return `<button class="${cl}" ${solved?"disabled":""} onclick="pick(${i})">${o.l}</button>`}).join("")+"</div>";
+ if(fb)h+=`<div class="fb ${fb.k}">${fb.t}</div>`;
+ for(let i=0;i<hint;i++)h+=`<div class="tip"><b>Tipp ${i+1}:</b> ${c.tips[i]}</div>`;
+ h+='<div class="row">';
+ if(solved)h+=`<button class="main" onclick="nextStep()">${s<S.length-1?"Weiter":"Ergebnis ansehen"}</button>`;
+ else{
+  if(c.cloze)h+=`<button class="main" onclick="check()">Prüfen</button>`;
+  if(hint<3)h+=`<button onclick="moreHint()">Tipp anzeigen</button>`;
+  else h+=`<button onclick="showSol()">Lösung zeigen</button>`;
+ }
+ h+="</div>";
+ el.innerHTML=h;
+}
+function setSel(j,v){sel[j]=v;chk[j]=undefined}
+function check(){
+ const c=steps(T[ti],ti)[s];
+ if(c.gaps.some((g,j)=>!sel[j])){fb={k:"bad",t:"Fülle alle Lücken aus."};render();return}
+ chk=c.gaps.map((g,j)=>sel[j]===g.ok);
+ if(chk.every(Boolean)){solved=true;fb={k:"ok",t:c.done}}
+ else{err[ti][s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+c.badGap[chk.indexOf(false)]}}
+ render();
+}
+function pick(i){
+ if(solved)return;
+ const c=steps(T[ti],ti)[s],o=c.opts[i];picked=i;
+ if(o.v===c.ok){solved=true;fb={k:"ok",t:c.done};}
+ else{err[ti][s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+c.bad(o.v)};}
+ render();
+}
+function moreHint(){hint=Math.min(3,hint+1);render()}
+function showSol(){
+ const c=steps(T[ti],ti)[s];err[ti][s]=true;solved=true;picked=null;
+ if(c.cloze){sel=c.gaps.map(g=>g.ok);chk=c.gaps.map(()=>true)}
+ fb={k:"ok",t:"Lösung: "+c.sol,sol:true};render();
+}
+function nextStep(){
+ const S=steps(T[ti],ti),c=S[s];
+ ans.push(c.cloze?"Begründung ergänzt":(fb&&fb.sol?c.sol:c.done.replace(/^Richtig: /,"")));
+ s++;hint=0;solved=false;fb=null;picked=null;sel=[];chk=[];
+ if(s>=S.length)over=true;
+ render();
+}
+function nextTask(){
+ ti++;s=0;hint=0;solved=false;fb=null;picked=null;ans=[];over=false;sel=[];chk=[];
+ if(ti>=T.length)end=true;
+ render();window.scrollTo({top:document.getElementById("task").offsetTop-10});
+}
+function result(el){
+ let h=`<h2>Deine Auswertung</h2><p>So sicher bist du bei den vier Teilschritten:</p><table class="res">`;
+ SK.forEach((k,j)=>{
+  const n=err.filter(e=>e[j]).length,gr=n===0?"g":n===1?"y":"r",lab=n===0?"✓ sicher":n===1?"~ fast sicher":"! noch üben";
+  h+=`<tr><td><b>${k[0]}</b></td><td><span class="amp ${gr}">${lab}</span></td></tr>
+  <tr><td colspan="2" style="border-top:0;padding-top:0">${n===0?"Das kannst du schon.":`Webseite: Aufgaben dieses Bausteins noch einmal üben <button onclick="restart()" style="min-height:32px;padding:2px 10px">Noch einmal</button><br>Arbeitsblatt: ${k[1]}`}</td></tr>`;
+ });
+ h+=`</table><p class="note">Weiter geht es mit <a href="baustein5.html">Baustein 5: Elektronen abgeben und aufnehmen im Modell</a>.</p><div class="row"><button class="main" onclick="restart()">Noch einmal beginnen</button></div>`;
+ el.innerHTML=h;
+}
+function restart(){ti=0;s=0;hint=0;solved=false;fb=null;over=false;end=false;picked=null;ans=[];sel=[];chk=[];err=T.map(()=>[false,false,false,false]);render()}
+{const t=mk("Natrium","Na");document.getElementById("exfig").innerHTML=trio(t).replace('<div class="pair">','').replace(/<\/div>$/,'');
+ document.getElementById("egfig").innerHTML=fig(2,2,{hi:2,cap:"Helium<br>2 e⁻ (Duett)"})+fig(10,10,{hi:8,cap:"Neon<br>2 | 8 (Oktett)"})+fig(18,18,{hi:8,cap:"Argon<br>2 | 8 | 8 (Oktett)"})}
+render();
+</script>
+</body>
+</html>

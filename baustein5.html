@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baustein 5: Elektronen abgeben und aufnehmen im Modell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a> · <a href="wissenscheck.html">Wissenscheck</a></p>
+<h1>Baustein 5: Elektronen abgeben und aufnehmen im Modell</h1>
+<p class="sub">Ich kann die Bildung eines Ions erläutern und im Schalenmodell darstellen (Donator-Akzeptor-Konzept).</p>
+
+<section class="card merke">
+<h2>Merke</h2>
+<p>Bei der Ionenbildung werden e<sup>−</sup> von einem Teilchen auf ein anderes übertragen.<br>
+<b>Donator</b> (Spender): Das Teilchen <b>gibt</b> e<sup>−</sup> ab und wird zum Kation.<br>
+<b>Akzeptor</b> (Empfänger): Das Teilchen <b>nimmt</b> e<sup>−</sup> auf und wird zum Anion.</p>
+<p class="sub">Vergleich: Bei einer Spende gibt der Spender etwas ab, und der Empfänger nimmt es an. Gibt ein Donator seine äußerste besetzte Schale ganz ab, entfällt diese Schale: Das Ion hat eine Schale weniger als das Atom.</p>
+<div class="pair"><b>Vorher</b></div>
+<div class="pair" id="mfig1"></div>
+<div class="pair"><b>Nachher</b></div>
+<div class="pair" id="mfig2"></div>
+</section>
+
+<details class="card" open>
+<summary>Beispiel vorgerechnet: Natrium</summary>
+<ol>
+<li>Natrium hat 1 Valenzelektron. Die Abgabe führt zur Konfiguration von Neon. Natrium ist der <b>Donator</b>.</li>
+<li>Es wird <b>1 e<sup>−</sup></b> abgegeben.</li>
+<li>Im Modell wird das e<sup>−</sup> der dritten Schale entfernt. Die dritte Schale ist leer und <b>entfällt</b>.</li>
+<li>Beschriftung: Na<sup>+</sup> hat <b>11 p<sup>+</sup>, 10 e<sup>−</sup> und 2 Schalen</b>.</li>
+</ol>
+<div class="pair" id="exfig"></div>
+</details>
+
+<section class="card" id="task"></section>
+<nav class="navbot"><a href="baustein4.html">← Baustein 4: Warum werden Ionen gebildet?</a><a href="baustein6.html">Baustein 6: Ionenladung mit dem PSE bestimmen →</a></nav>
+</main>
+
+<script>
+const R=[["H","","","","","","","He"],["Li","Be","B","C","N","O","F","Ne"],["Na","Mg","Al","Si","P","S","Cl","Ar"],["K","Ca","Ga","Ge","As","Se","Br","Kr"]];
+const Z={Na:11,Cl:17,Mg:12,O:8,Al:13};
+const E="e<sup>−</sup>",P="p<sup>+</sup>",AMB="#e39b13";
+const cfg=n=>{const o=[];let r=n;for(const c of [2,8,8,18]){if(r<=0)break;const m=Math.min(c,r);o.push(m);r-=m}return o};
+const last=a=>a[a.length-1];
+const mk=(n,s)=>{
+ const r=R.findIndex((row,i)=>i>0&&row.includes(s)),z=Z[s],ve=last(cfg(z)),don=ve<8-ve,k=Math.min(ve,8-ve),ch=don?k:-k;
+ return{n,s,r,z,ve,don,k,ch,y:z-ch,ns:cfg(z).length,nsI:cfg(z-ch).length};
+};
+const T=[["Natrium","Na"],["Chlor","Cl"],["Magnesium","Mg"],["Sauerstoff","O"],["Aluminium","Al"]].map(a=>mk(...a));
+const SK=[
+ ["Donator und Akzeptor unterscheiden","AB 2; AB 4, Aufgabe 1 (die Begriffe Donator und Akzeptor: noch kein Arbeitsblatt)"],
+ ["Die Zahl der übertragenen e⁻ bestimmen","AB 3, Aufgabe 2"],
+ ["Die Ionenbildung im Schalenmodell darstellen","AB 3, Aufgabe 3; AB 4, Aufgabe 2"],
+ ["Das Ion beschriften (p⁺, e⁻, Schalenzahl)","AB 4, Aufgabe 2"]
+];
+const ion=t=>`${t.s}<sup>${t.k>1?t.k:""}${t.ch>0?"+":"−"}</sup>`;
+const nums=a=>a.map(v=>({l:v,v}));
+const rot=(a,i)=>a.map((_,j)=>a[(j+i)%a.length]);
+const pos=(i,j,m)=>{const a=-Math.PI/2+j*2*Math.PI/m+(i%2?Math.PI/m:0),r=30+16*i;return[85+r*Math.cos(a),85+r*Math.sin(a)]};
+
+function fig(z,e,o={}){
+ const sh=cfg(e),ns=sh.length;
+ let h=`<circle cx="85" cy="85" r="18" fill="var(--pro)"/><text x="85" y="89" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const rad=30+16*i,lst=i===ns-1,gh=lst&&o.ghost?o.ghost:0,m=n+gh,dsh=lst&&o.dash;
+  h+=`<circle cx="85" cy="85" r="${rad}" fill="none" stroke="${dsh?AMB:"var(--mut)"}" stroke-opacity="${dsh?1:.45}" stroke-width="${dsh?2.5:1.5}" ${dsh?'stroke-dasharray="5 4"':""}/>`;
+  for(let j=0;j<m;j++){
+   const[x,y]=pos(i,j,m).map(v=>v.toFixed(1));
+   if(j<n){const hi=lst&&o.hi&&j>=n-o.hi;h+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${hi?AMB:"var(--ele)"}" stroke="var(--card)" stroke-width="1"/>`}
+   else h+=`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+  }
+ });
+ return `<figure><svg viewBox="0 0 170 170" role="img" aria-label="Schalenmodell"><title>Schalenmodell</title>${h}</svg><figcaption>${o.cap||""}</figcaption></figure>`;
+}
+const atomFig=(t,cap)=>fig(t.z,t.z,t.don?{hi:t.k,dash:1,cap}:{ghost:t.k,cap});
+const ionFig=(t,cap)=>fig(t.z,t.y,{hi:t.don?0:t.k,cap});
+const mid=(t)=>`<div class="mid">→<small>${t.k} ${E} ${t.don?"abgegeben":"aufgenommen"}</small></div>`;
+
+let bsel=new Set();
+function builder(t){
+ const sh=cfg(t.z),ns=sh.length;
+ let h=`<circle cx="85" cy="85" r="18" fill="var(--pro)"/><text x="85" y="89" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${t.z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const lst=i===ns-1,gh=!t.don&&lst?t.k:0,m=n+gh;
+  h+=`<circle cx="85" cy="85" r="${30+16*i}" fill="none" stroke="var(--mut)" stroke-opacity=".45" stroke-width="1.5"/>`;
+  for(let j=0;j<m;j++){
+   const id=`${i}-${j}`,[x,y]=pos(i,j,m).map(v=>v.toFixed(1)),on=bsel.has(id),isE=j<n;
+   let vis;
+   if(t.don)vis=on?`<circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${AMB}" stroke-width="2.5" stroke-dasharray="3 2"/>`:`<circle cx="${x}" cy="${y}" r="5.5" fill="var(--ele)" stroke="var(--card)" stroke-width="1"/>`;
+   else if(isE)vis=`<circle cx="${x}" cy="${y}" r="5.5" fill="var(--ele)" stroke="var(--card)" stroke-width="1"/>`;
+   else vis=on?`<circle cx="${x}" cy="${y}" r="5.5" fill="${AMB}" stroke="var(--card)" stroke-width="1"/>`:`<circle cx="${x}" cy="${y}" r="5.5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+   h+=vis;
+   if((t.don||!isE)&&!solved)h+=`<circle cx="${x}" cy="${y}" r="9" fill="transparent" style="cursor:pointer" onclick="tog('${id}')"/>`;
+  }
+ });
+ return `<svg class="bld" viewBox="0 0 170 170" role="img" aria-label="Schalenmodell zum Anklicken"><title>Schalenmodell zum Anklicken</title>${h}</svg>`;
+}
+function tog(id){if(solved)return;bsel.has(id)?bsel.delete(id):bsel.add(id);fb=null;render()}
+
+function steps(t,i){
+ const z=t.z,y=t.y,k=t.k,ve=t.ve,don=t.don,w=don?["gibt","ab","abgegeben"]:["nimmt","auf","aufgenommen"];
+ const opts3=[{l:`${z} ${P}, ${y} ${E}, ${t.nsI} Schalen`,v:"ok"},{l:`${z} ${P}, ${y} ${E}, ${t.nsI+1} Schalen`,v:"sh"},{l:`${y} ${P}, ${y} ${E}, ${t.nsI} Schalen`,v:"pr"},{l:`${z} ${P}, ${z} ${E}, ${t.ns} Schalen`,v:"no"}];
+ return[
+ {nm:"Donator oder Akzeptor?",q:`Welche Rolle hat ein ${t.n}-Atom bei der Ionenbildung?`,wide:true,ok:don?"d":"a",
+  opts:rot([{l:`Donator: Das Atom gibt ${E} ab.`,v:"d"},{l:`Akzeptor: Das Atom nimmt ${E} auf.`,v:"a"}],i),
+  tips:[`Der Donator ist der Spender (gibt ${E} ab), der Akzeptor der Empfänger (nimmt ${E} auf).`,
+        `Zähle die Valenzelektronen: Wenige (1 bis 3) werden abgegeben, viele (5 bis 7) ergänzt, bis die Edelgaskonfiguration erreicht ist. Mit diesem Tipp erscheint das Schalenmodell.`,
+        `Beispiel Natrium: 1 Valenzelektron, die Abgabe von 1 ${E} führt zur Konfiguration von Neon. Natrium ist der Donator.`],
+  sol:`${t.n} hat ${ve} Valenzelektronen. Der kürzere Weg zur Edelgaskonfiguration ist die ${don?"Abgabe":"Aufnahme"} von ${k} ${E}: ${don?"Donator":"Akzeptor"}.`,
+  bad:()=>`Prüfe die Valenzelektronen von ${t.n}: Es sind ${ve}. ${don?`Mit so wenigen ist die Abgabe der kürzere Weg.`:`Mit so vielen ist die Aufnahme von ${k} ${E} der kürzere Weg.`}`,
+  done:`Richtig: ${don?"Donator (gibt "+E+" ab)":"Akzeptor (nimmt "+E+" auf)"}.`},
+ {nm:"Zahl der e⁻",q:`Wie viele ${E} ${w[0]} das ${t.n}-Atom ${w[1]}, bis es eine Edelgaskonfiguration erreicht?`,opts:nums([1,2,3,4]),ok:k,
+  tips:[don?`Ein Donator gibt alle seine Valenzelektronen ab.`:`Ein Akzeptor nimmt so viele ${E} auf, bis die Außenschale 8 ${E} trägt.`,
+        `${t.n} hat ${ve} Valenzelektronen. Mit diesem Tipp erscheint das Schalenmodell.`,
+        `${don?"Beispiel Natrium: 1 Valenzelektron, also Abgabe von 1 "+E+".":"Beispiel Fluor: 7 Valenzelektronen, 8 − 7 = 1, also Aufnahme von 1 "+E+"."} Wie ist es bei ${t.n}?`],
+  sol:don?`${t.n} hat ${ve} Valenzelektronen und gibt alle ab: ${k} ${E}.`:`${t.n} hat ${ve} Valenzelektronen. Bis zum Oktett fehlen 8 − ${ve} = ${k} ${E}.`,
+  bad:()=>`Das stimmt noch nicht. ${t.n} hat ${ve} Valenzelektronen.`,
+  done:`Richtig: ${k} ${E} ${w[2]}.`},
+ {nm:"Modell",build:true,q:don?`Markiere im Schalenmodell die ${k} ${E}, die das ${t.n}-Atom abgibt.`:`Fülle im Schalenmodell die ${k} freien Plätze auf, auf die das ${t.n}-Atom ${E} aufnimmt.`,
+  tips:[don?`Abgegeben werden nur die ${E} der äußersten Schale (die Valenzelektronen).`:`Aufgenommen werden ${E} auf der äußersten Schale, bis sie voll ist.`,
+        don?`Klicke genau ${k} ${E} auf der äußersten Schale an.`:`Klicke auf die gestrichelten Plätze auf der äußersten Schale.`,
+        don?`Beispiel Natrium: Das ${E} der dritten Schale wird abgegeben. Die dritte Schale ist danach leer.`:`Beispiel Fluor: Auf der äußersten Schale ist 1 Platz frei. Er wird mit 1 ${E} besetzt.`],
+  sol:don?`Die ${k} ${E} der äußersten Schale werden abgegeben. Die leere Schale entfällt.`:`Die ${k} freien Plätze der äußersten Schale werden besetzt.`,
+  done:don?`Richtig: Die ${k} ${E} der äußersten Schale sind abgegeben, die leere Schale entfällt.`:`Richtig: Die äußerste Schale ist jetzt voll besetzt.`},
+ {nm:"Ion beschriften",q:`Wie lautet die Beschriftung des ${t.n}-Ions?`,wide:true,opts:rot(opts3,i),ok:"ok",
+  tips:[`Bei der Ionenbildung ändert sich nur die Hülle. Die Zahl der ${P} im Kern bleibt gleich.`,
+        `Rechne: Zahl der ${E} im Atom (${z}) ${don?"minus":"plus"} ${k}. Zähle dann die besetzten Schalen. Mit diesem Tipp erscheinen die Schalenmodelle.`,
+        `Beispiel Natrium: 11 ${P}, 11 − 1 = 10 ${E}. Die dritte Schale ist leer und entfällt: 2 Schalen.`],
+  sol:`Das ${t.n}-Ion hat ${z} ${P}, ${y} ${E} und ${t.nsI} Schalen.`,
+  bad:v=>v==="sh"?(don?`Die äußerste Schale ist leer geworden und entfällt. Das Ion hat eine Schale weniger als das Atom.`:`Bei der Aufnahme kommt keine neue Schale hinzu: Die ${E} besetzen freie Plätze der äußersten Schale.`):v==="pr"?`Die Zahl der ${P} im Kern ändert sich bei der Ionenbildung nicht.`:`Hier hat sich nichts geändert: Das Ion hat eine andere Zahl an ${E} als das Atom.`,
+  done:`Richtig: ${z} ${P}, ${y} ${E}, ${t.nsI} Schalen.`}
+ ];
+}
+
+let ti=0,s=0,hint=0,solved=false,fb=null,over=false,end=false,picked=null,ans=[],err=T.map(()=>[false,false,false,false]);
+
+function gfx(t){
+ const h2=hint>=2||solved;
+ if(s<=1&&h2)return `<div class="pair">${atomFig(t,`${t.n}-Atom<br>${t.ve} Valenzelektronen`)}</div><p class="note">${t.don?`Orange: die ${E}, die abgegeben werden.`:`Gestrichelt: die freien Plätze, die ${E} aufnehmen.`}</p>`;
+ if(s===2&&solved)return `<div class="pair">${atomFig(t,`${t.n}-Atom<br>${t.ns} Schalen`)}${mid(t)}${ionFig(t,`${ion(t)}<br>${t.nsI} Schalen`)}</div><p class="note">${t.don?`Die leere äußerste Schale entfällt: Das Ion hat eine Schale weniger.`:`Die Schalenzahl bleibt gleich: Die ${E} besetzen freie Plätze der äußersten Schale.`}</p>`;
+ if(s===3&&h2)return `<div class="pair">${ionFig(t,`${ion(t)}<br>${t.z} ${P} · ${t.y} ${E} · ${t.nsI} Schalen`)}</div>`;
+ return "";
+}
+function render(){
+ const el=document.getElementById("task");
+ if(end)return result(el);
+ const t=T[ti],S=steps(t,ti);
+ let h=`<h2>Aufgabe ${ti+1} von ${T.length}: ${t.n}</h2><div class="chips">${S.map((x,i)=>`<span class="chip ${over||i<s?"done":i===s?"cur":""}">${x.nm}</span>`).join("")}</div>`;
+ ans.forEach(a=>h+=`<p class="recap">✓ ${a}</p>`);
+ if(over){
+  h+=`<div class="fb ok"><b>Steckbrief: ${t.n} (${t.don?"Donator":"Akzeptor"})</b><div class="pair">${atomFig(t,`${t.n}-Atom`)}${mid(t)}${ionFig(t,`${ion(t)}`)}</div><div class="fx">${t.n}-Atom: ${t.z} ${P}, ${t.z} ${E}, ${t.ns} Schalen<br>${ion(t)}: ${t.z} ${P}, ${t.y} ${E}, ${t.nsI} Schalen<br>${t.don?"Donator: gibt":"Akzeptor: nimmt"} ${t.k} ${E} ${t.don?"ab":"auf"}</div></div>
+  <div class="row"><button class="main" onclick="nextTask()">${ti<T.length-1?"Nächste Aufgabe":"Auswertung ansehen"}</button></div>`;
+  el.innerHTML=h;return;
+ }
+ const c=S[s];
+ h+=`<p class="q">${c.q}</p>`+gfx(t);
+ if(c.build)h+=builder(t);
+ else h+=`<div class="opts ${c.wide?"w":""}">`+c.opts.map((o,i)=>{
+   const cl=solved&&o.v===c.ok?"right":(picked===i&&!solved&&o.v!==c.ok)?"wrong":"";
+   return `<button class="${cl}" ${solved?"disabled":""} onclick="pick(${i})">${o.l}</button>`}).join("")+"</div>";
+ if(fb)h+=`<div class="fb ${fb.k}">${fb.t}</div>`;
+ for(let i=0;i<hint;i++)h+=`<div class="tip"><b>Tipp ${i+1}:</b> ${c.tips[i]}</div>`;
+ h+='<div class="row">';
+ if(solved)h+=`<button class="main" onclick="nextStep()">${s<S.length-1?"Weiter":"Ergebnis ansehen"}</button>`;
+ else{
+  if(c.build)h+=`<button class="main" onclick="checkBuild()">Prüfen</button>`;
+  if(hint<3)h+=`<button onclick="moreHint()">Tipp anzeigen</button>`;
+  else h+=`<button onclick="showSol()">Lösung zeigen</button>`;
+ }
+ h+="</div>";
+ el.innerHTML=h;
+}
+function wrong(msg){err[ti][s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+msg};render()}
+function checkBuild(){
+ const t=T[ti],c=steps(t,ti)[s],n=bsel.size;
+ if(n===0){fb={k:"bad",t:"Du hast noch nichts markiert."};render();return}
+ if(t.don){
+  const outer=[...bsel].filter(x=>x.startsWith(`${t.ns-1}-`)).length;
+  if(outer<n)return wrong(`Abgegeben werden nur ${E} der äußersten Schale, nicht aus dem Inneren des Atoms.`);
+ }
+ if(n!==t.k)return wrong(`Du hast ${n} markiert, gefragt sind ${t.k}.`);
+ solved=true;fb={k:"ok",t:c.done};render();
+}
+function pick(i){
+ if(solved)return;
+ const c=steps(T[ti],ti)[s],o=c.opts[i];picked=i;
+ if(o.v===c.ok){solved=true;fb={k:"ok",t:c.done};render()}
+ else wrong(c.bad(o.v));
+}
+function moreHint(){hint=Math.min(3,hint+1);render()}
+function showSol(){
+ const t=T[ti],c=steps(t,ti)[s];err[ti][s]=true;solved=true;picked=null;
+ if(c.build){bsel=new Set();const m=t.don?[...Array(t.k).keys()].map(j=>`${t.ns-1}-${j}`):[...Array(t.k).keys()].map(j=>`${t.ns-1}-${last(cfg(t.z))+j}`);m.forEach(x=>bsel.add(x))}
+ fb={k:"ok",t:"Lösung: "+c.sol,sol:true};render();
+}
+function nextStep(){
+ const S=steps(T[ti],ti),c=S[s];
+ ans.push(fb&&fb.sol?c.sol:c.done.replace(/^Richtig: /,""));
+ s++;hint=0;solved=false;fb=null;picked=null;bsel=new Set();
+ if(s>=S.length)over=true;
+ render();
+}
+function nextTask(){
+ ti++;s=0;hint=0;solved=false;fb=null;picked=null;ans=[];over=false;bsel=new Set();
+ if(ti>=T.length)end=true;
+ render();window.scrollTo({top:document.getElementById("task").offsetTop-10});
+}
+function result(el){
+ let h=`<h2>Deine Auswertung</h2><p>So sicher bist du bei den vier Teilschritten:</p><table class="res">`;
+ SK.forEach((k,j)=>{
+  const n=err.filter(e=>e[j]).length,gr=n===0?"g":n===1?"y":"r",lab=n===0?"✓ sicher":n===1?"~ fast sicher":"! noch üben";
+  h+=`<tr><td><b>${k[0]}</b></td><td><span class="amp ${gr}">${lab}</span></td></tr>
+  <tr><td colspan="2" style="border-top:0;padding-top:0">${n===0?"Das kannst du schon.":`Webseite: Aufgaben dieses Bausteins noch einmal üben <button onclick="restart()" style="min-height:32px;padding:2px 10px">Noch einmal</button><br>Arbeitsblatt: ${k[1]}`}</td></tr>`;
+ });
+ h+=`</table><p class="note">Weiter geht es mit <a href="baustein6.html">Baustein 6: Ionenladung mit dem PSE bestimmen</a>.</p><div class="row"><button class="main" onclick="restart()">Noch einmal beginnen</button></div>`;
+ el.innerHTML=h;
+}
+function restart(){ti=0;s=0;hint=0;solved=false;fb=null;over=false;end=false;picked=null;ans=[];bsel=new Set();err=T.map(()=>[false,false,false,false]);render()}
+{const na=mk("Natrium","Na"),cl=mk("Chlor","Cl");
+ document.getElementById("exfig").innerHTML=atomFig(na,"Natrium-Atom<br>3 Schalen")+mid(na)+ionFig(na,"Na<sup>+</sup><br>2 Schalen");
+ document.getElementById("mfig1").innerHTML=atomFig(na,"Natrium-Atom<br>Donator")+`<div class="mid">→<small>1 e⁻</small></div>`+atomFig(cl,"Chlor-Atom<br>Akzeptor");
+ document.getElementById("mfig2").innerHTML=ionFig(na,"Na<sup>+</sup><br>Kation, 2 Schalen")+ionFig(cl,"Cl<sup>−</sup><br>Anion, 3 Schalen")}
+render();
+</script>
+</body>
+</html>

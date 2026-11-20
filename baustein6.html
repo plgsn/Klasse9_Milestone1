@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baustein 6: Ionenladung mit dem PSE bestimmen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a> · <a href="wissenscheck.html">Wissenscheck</a></p>
+<h1>Baustein 6: Ionenladung mit dem PSE bestimmen</h1>
+<p class="sub">Ich kann mit dem Periodensystem die Ladung eines Ions bestimmen.</p>
+
+<section class="card merke">
+<h2>Merke</h2>
+<p>Ein Atom ist elektrisch neutral: Es hat gleich viele Protonen (p<sup>+</sup>) wie Elektronen (e<sup>−</sup>). Bei der Ionenbildung ändert sich nur die Zahl der e<sup>−</sup>, die Zahl der p<sup>+</sup> im Kern bleibt gleich.</p>
+<p>Ionen mit <b>Edelgaskonfiguration</b> (voll besetzte äußerste Schale) sind besonders stabil. Bei Hauptgruppenelementen entsteht bei der Ionenbildung in der Regel diese Konfiguration.</p>
+<p><b>Abgabe von e<sup>−</sup>:</b> Die positive Ladung der p<sup>+</sup> überwiegt. Es entsteht ein positiv geladenes Ion (Kation).<br>
+<b>Aufnahme von e<sup>−</sup>:</b> Die negative Ladung der e<sup>−</sup> überwiegt. Es entsteht ein negativ geladenes Ion (Anion).</p>
+<p class="sub">Vergleich: Stell dir eine Waage vor. Auf der einen Seite liegen die p<sup>+</sup>, auf der anderen die e<sup>−</sup>. Im Atom ist sie im Gleichgewicht. Nimmst du e<sup>−</sup> weg, sinkt die Seite der p<sup>+</sup>.</p>
+</section>
+
+<details class="card" open>
+<summary>Beispiel vorgerechnet: Natrium</summary>
+<ol>
+<li>Natrium steht in Hauptgruppe I: <b>1 Valenzelektron</b>.</li>
+<li>Rückwärts liegt Neon (Periode 2) nur 1 Schritt entfernt, vorwärts Argon (Periode 3) 7 Schritte. Der kürzere Weg ist die <b>Abgabe von e<sup>−</sup></b>. Dabei entfällt die dritte Schale: Das Ion hat wie Neon nur noch 2 Schalen und damit die Edelgaskonfiguration von Neon.</li>
+<li>1 Schritt bis Neon: Es wird <b>1 e<sup>−</sup></b> abgegeben.</li>
+<li>Ladungsbilanz: 11 p<sup>+</sup> und 10 e<sup>−</sup>, also 11 − 10 = +1. Es entsteht das Kation <b>Na<sup>+</sup></b>.</li>
+</ol>
+</details>
+
+<section class="card">
+<h2>Das Periodensystem (Hauptgruppen)</h2>
+<div class="scroll" id="pse"></div>
+<p class="note">Die Nebengruppen sind ausgeblendet. Die farbige Spalte rechts zeigt die Edelgase.</p>
+</section>
+
+<section class="card" id="task"></section>
+<nav class="navbot"><a href="baustein5.html">← Baustein 5: Elektronen abgeben und aufnehmen im Modell</a><a href="baustein7.html">Baustein 7: Ionenformel, Teilgleichung und Wortgleichung →</a></nav>
+</main>
+
+<script>
+const R=[["H","","","","","","","He"],["Li","Be","B","C","N","O","F","Ne"],["Na","Mg","Al","Si","P","S","Cl","Ar"],["K","Ca","Ga","Ge","As","Se","Br","Kr"]];
+const Z={H:1,He:2,Li:3,Be:4,B:5,C:6,N:7,O:8,F:9,Ne:10,Na:11,Mg:12,Al:13,Si:14,P:15,S:16,Cl:17,Ar:18,K:19,Ca:20,Ga:31,Ge:32,As:33,Se:34,Br:35,Kr:36};
+const RO=["I","II","III","IV","V","VI","VII","VIII"];
+const RAW=[["Aluminium","Al"],["Fluor","F"],["Calcium","Ca"],["Schwefel","S"],["Stickstoff","N"]];
+const E="e<sup>−</sup>",P="p<sup>+</sup>";
+const T=RAW.map(([n,s])=>{
+  const r=R.findIndex((row,i)=>i>0&&row.includes(s)),c=R[r].indexOf(s);
+  const ve=c+1,back=ve,fwd=8-ve,don=back<fwd,k=Math.min(back,fwd),z=Z[s];
+  return{n,s,r,c,ve,back,fwd,don,k,z,y:don?z-k:z+k,ch:don?k:-k,egL:["He","Ne","Ar"][r-1],egR:R[r][7]};
+});
+const SK=[
+ ["Valenzelektronen im PSE ablesen","Baustein 2 (Atombau und Valenzelektronen)","noch kein Arbeitsblatt"],
+ ["Den kürzeren Weg zur Edelgaskonfiguration bestimmen, auch rückwärts","Baustein 6","AB 3, Aufgabe 2"],
+ ["Die Zahl der übertragenen "+E+" bestimmen","Baustein 6","AB 3, Aufgabe 2"],
+ ["Ladung und Vorzeichen über die Ladungsbilanz bestimmen","Baustein 3 (Ladung von "+P+" und "+E+")","AB 4, Aufgabe 2 und 3"]
+];
+const NAMES=["Valenzelektronen","Weg zum Edelgas","Zahl der e⁻","Ladung"];
+const chl=c=>`${Math.abs(c)}${c>0?"+":"−"}`;
+const ion=t=>`${t.s}<sup>${Math.abs(t.ch)>1?Math.abs(t.ch):""}${t.ch>0?"+":"−"}</sup>`;
+const nums=a=>a.map(v=>({l:v,v}));
+
+function steps(t){
+ const w=t.don?"abgegeben":"aufgenommen",eg=t.don?t.egL:t.egR,pr=t.r+1;
+ return[
+ {q:`Wie viele Valenzelektronen hat ${t.n}?`,opts:nums([1,2,3,4,5,6,7,8]),ok:t.ve,
+  tips:[`Suche ${t.n} (${t.s}) im Periodensystem. Über der Spalte steht die Hauptgruppe. Bei den Hauptgruppen ist ihre Nummer gleich der Zahl der Valenzelektronen (Außenelektronen).`,
+        `Die Hauptgruppen sind mit I bis VIII beschriftet. Lies die römische Zahl über ${t.s} ab und wandle sie in eine normale Zahl um. Mit diesem Tipp erscheint auch das Schalenmodell.`,
+        `Beispiel Magnesium: Es steht in Hauptgruppe II, also hat es 2 Valenzelektronen. Wie ist es bei ${t.n}?`],
+  sol:`${t.n} steht in Hauptgruppe ${RO[t.c]}, es hat ${t.ve} Valenzelektronen.`,
+  bad:()=>`Das stimmt noch nicht. Die Hauptgruppe steht über der Spalte von ${t.s}.`,
+  done:`Richtig: ${t.ve} Valenzelektronen.`},
+ {q:`Welche Edelgaskonfiguration erreicht ${t.n} mit der kleineren Zahl übertragener ${E}? Nutze den Ausschnitt des Periodensystems.`,
+  opts:[{l:`Abgabe von ${E}: Konfiguration von ${t.egL} (Periode ${t.r})`,v:"d"},{l:`Aufnahme von ${E}: Konfiguration von ${t.egR} (Periode ${pr})`,v:"a"}],wide:true,ok:t.don?"d":"a",
+  tips:[`Vergleiche die Schritte bis zum Edelgas in beiden Richtungen. Ziel ist die Edelgaskonfiguration (voll besetzte äußerste Schale). Bei der Abgabe liegt das Edelgas in der Periode darüber, bei der Aufnahme in der eigenen Periode. Es werden so wenige ${E} wie möglich übertragen.`,
+        `Mit diesem Tipp erscheinen die Schrittzahlen im Ausschnitt. Welche Zahl ist kleiner?`,
+        `Beispiel Natrium: 1 Schritt bis Neon (Periode 2), 7 Schritte bis Argon (Periode 3). Die Abgabe ist der kürzere Weg.`],
+  sol:`Bis ${t.egL} (Periode ${t.r}) sind es ${t.back} Schritte, bis ${t.egR} (Periode ${pr}) ${t.fwd} Schritte. Der kürzere Weg ist die ${t.don?"Abgabe":"Aufnahme"} von ${E}.`,
+  bad:v=>v==="a"?`Hast du auch die Periode darüber betrachtet? Dort steht ${t.egL}. Vergleiche beide Wege.`:`Das ist der längere Weg. Vergleiche die Schritte in beiden Richtungen.`,
+  done:`Richtig: ${t.don?`Abgabe von ${E}: Das Ion erreicht die Edelgaskonfiguration von ${t.egL} und hat eine Schale weniger als das Atom (${t.r} statt ${pr}).`:`Aufnahme von ${E}: Das Ion erreicht die Edelgaskonfiguration von ${t.egR} und hat dieselbe Schalenzahl wie das Atom (${pr}).`}`},
+ {q:`Wie viele ${E} werden ${w}?`,opts:nums([1,2,3,4]),ok:t.k,
+  tips:[`Jeder Schritt bis zum Edelgas entspricht einem ${E}. Mit diesem Tipp erscheint das Schalenmodell.`,
+        `Zähle im Ausschnitt die Schritte von ${t.s} bis ${eg} nach.`,
+        `Beispiel Natrium: 1 Schritt bis Neon, also 1 ${E}. Wie viele Schritte sind es bei ${t.n}?`],
+  sol:`Von ${t.s} bis ${eg} sind es ${t.k} Schritte, also werden ${t.k} ${E} ${w}.`,
+  bad:()=>`Das stimmt noch nicht. Zähle die Schritte bis ${eg}.`,
+  done:`Richtig: ${t.k} ${E} ${t.k>1?"werden":"wird"} ${w}.`},
+ {q:`Das ${t.n}-Ion hat ${t.z} ${P} und ${t.y} ${E}. Welche Ladung hat es?`,opts:[3,2,1,-1,-2,-3].map(v=>({l:chl(v),v})),ok:t.ch,dots:true,
+  tips:[`Ein Atom ist neutral. Im Ion hat sich die Zahl der ${E} geändert. Überwiegen die ${P}, ist das Ion positiv geladen, überwiegen die ${E}, ist es negativ geladen.`,
+        `Stelle die Ladungsbilanz auf: Zahl der ${P} minus Zahl der ${E}, also ${t.z} − ${t.y}. Ist das Ergebnis positiv oder negativ?`,
+        `Beispiel Natrium: 11 ${P} und 10 ${E}. 11 − 10 = +1, also 1+. Rechne ebenso für ${t.n}.`],
+  sol:`${t.z} − ${t.y} = ${t.ch>0?"+":"−"}${Math.abs(t.ch)}. Das Ion hat die Ladung ${chl(t.ch)}.`,
+  bad:v=>Math.abs(v)===Math.abs(t.ch)
+    ?`Die Zahl stimmt, aber das Vorzeichen nicht. ${t.don?`Nach der Abgabe von ${E} überwiegt die positive Ladung der ${P}: Das Ion ist positiv geladen.`:`Nach der Aufnahme von ${E} überwiegt die negative Ladung der ${E}: Das Ion ist negativ geladen.`}`
+    :`Die Zahl stimmt nicht. Stelle die Ladungsbilanz auf: ${t.z} ${P} minus ${t.y} ${E}.`,
+  done:`Richtig: Ladung ${chl(t.ch)}.`}
+ ];
+}
+
+let ti=0,s=0,hint=0,solved=false,fb=null,over=false,end=false,picked=null,ans=[],err=T.map(()=>[false,false,false,false]);
+
+function pse(t){
+ let h='<table class="pse"><tr><th></th>'+RO.map(r=>`<th>${r}</th>`).join("")+"</tr>";
+ R.forEach((row,i)=>{h+=`<tr><th class="pn">${i+1}</th>`+row.map((x,j)=>{
+   const cl=!x?"e0":(t&&t.s===x)?"cur":j===7?"eg":"";
+   return `<td class="${cl}">${x}</td>`}).join("")+"</tr>"});
+ document.getElementById("pse").innerHTML=h+"</table>";
+}
+function ex(t,showN){
+ let h=`<div class="scroll"><table class="ex"><tr><th></th>${RO.map(r=>`<th>${r}</th>`).join("")}</tr>`;
+ [[t.r-1,0],[t.r,1]].forEach(([ri,cur])=>{
+  h+=`<tr><th class="pl">Periode ${ri+1}<br>${ri+1} Schalen</th>`;
+  R[ri].forEach((x,j)=>{
+   let cl=!x?"e0":j===7?"eg":"",b="";
+   if(cur&&j===t.c)cl="cur";
+   if(j===7&&x)cl+=" tg";
+   if(showN&&x){
+    if(cur&&j<t.c)b=`←${t.c-j}`;
+    if(cur&&j>t.c)b=`${j-t.c}→`;
+    if(!cur&&j===7)b=`↖${t.back}`;
+   }
+   h+=`<td class="${cl}">${x}<small>${b}</small></td>`;
+  });
+  h+="</tr>";
+ });
+ return h+`</table></div><p class="note">Abgabe von ${E} führt zum Edelgas der Periode darüber: Dort ist eine Schale weniger besetzt. Aufnahme von ${E} führt zum Edelgas der eigenen Periode. Die Zahlen zählen die Schritte vom Element aus.</p>`;
+}
+function dots(t){
+ const d=(n,c,x)=>Array.from({length:n},()=>`<span class="d ${c}">${x}</span>`).join("");
+ return `<p class="lbl">Teilchen des ${t.n}-Ions:</p><div class="dots">${d(t.z,"p",P)}</div><div class="dots">${d(t.y,"e",E)}</div>`;
+}
+function cfg(n){const cp=[2,8,8,18],o=[];let r=n;for(const c of cp){if(r<=0)break;const m=Math.min(c,r);o.push(m);r-=m}return o}
+const AMB="#e39b13";
+function fig(z,e,o={}){
+ const sh=cfg(e),ns=sh.length,cx=85,cy=85;
+ let g=`<circle cx="${cx}" cy="${cy}" r="18" fill="var(--pro)"/><text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const rad=30+16*i,last=i===ns-1,gh=last&&o.ghost?o.ghost:0,m=n+gh,dsh=last&&o.dash;
+  g+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${dsh?AMB:"var(--mut)"}" stroke-opacity="${dsh?1:.45}" stroke-width="${dsh?2.5:1.5}" ${dsh?'stroke-dasharray="5 4"':""}/>`;
+  for(let j=0;j<m;j++){
+   const a=-Math.PI/2+j*2*Math.PI/m+(i%2?Math.PI/m:0),x=(cx+rad*Math.cos(a)).toFixed(1),y=(cy+rad*Math.sin(a)).toFixed(1);
+   if(j<n){const hi=last&&o.hi&&j>=n-o.hi;g+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${hi?AMB:"var(--ele)"}" stroke="var(--card)" stroke-width="1"/>`}
+   else g+=`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+  }
+ });
+ return `<figure><svg viewBox="0 0 170 170" role="img" aria-label="Schalenmodell"><title>Schalenmodell</title>${g}</svg><figcaption>${o.cap||""}</figcaption></figure>`;
+}
+function trio(t){
+ const eg=t.don?t.egL:t.egR,w=t.don?"abgegeben":"aufgenommen",n=x=>cfg(x).length;
+ const a=fig(t.z,t.z,t.don?{hi:t.k,dash:1,cap:`${t.n}-Atom<br>${n(t.z)} Schalen`}:{ghost:t.k,cap:`${t.n}-Atom<br>${n(t.z)} Schalen`});
+ const b=fig(t.z,t.y,{hi:t.don?0:t.k,cap:`${ion(t)}-Ion<br>${n(t.y)} Schalen`});
+ const c=fig(Z[eg],Z[eg],{cap:`${eg}-Atom<br>${n(Z[eg])} Schalen`});
+ return `<div class="pair">${a}<div class="mid">→<small>${t.k} ${E} ${w}</small></div>${b}<div class="mid">=<small>gleiche Elektronen&shy;anordnung</small></div>${c}</div><p class="note">Orange: ${t.don?`Diese ${E} und die äußerste Schale entfallen.`:`Diese ${E} kommen hinzu und füllen die äußerste Schale.`} Das Ion hat die Edelgaskonfiguration von ${eg}, aber eine andere Zahl an ${P}.</p>`;
+}
+function waage(t){
+ const show=hint>=2||solved,a=show?Math.min(16,5*Math.abs(t.ch)):0,r=a*Math.PI/180,d=100*Math.sin(r),dx=100*Math.cos(r),sg=t.ch>0?1:-1;
+ const yL=60+sg*d,yR=60-sg*d,xL=140-dx,xR=140+dx,f=v=>v.toFixed(1);
+ const pan=(x,y,c,tx)=>`<line x1="${f(x)}" y1="${f(y)}" x2="${f(x-26)}" y2="${f(y+34)}" stroke="var(--mut)"/><line x1="${f(x)}" y1="${f(y)}" x2="${f(x+26)}" y2="${f(y+34)}" stroke="var(--mut)"/><rect x="${f(x-38)}" y="${f(y+34)}" width="76" height="26" rx="6" fill="${c}"/><text x="${f(x)}" y="${f(y+52)}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">${tx}</text>`;
+ return `<svg class="wg" viewBox="0 0 280 170" role="img" aria-label="Waage mit Protonen und Elektronen"><title>Waage</title><line x1="140" y1="60" x2="140" y2="158" stroke="var(--mut)" stroke-width="3"/><line x1="100" y1="158" x2="180" y2="158" stroke="var(--mut)" stroke-width="4"/><line x1="${f(xL)}" y1="${f(yL)}" x2="${f(xR)}" y2="${f(yR)}" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>${pan(xL,yL,"var(--pro)",t.z+" p⁺")}${pan(xR,yR,"var(--ele)",t.y+" e⁻")}</svg><p class="note">${show?`Die Seite mit der größeren Ladung sinkt: Es überwiegen die ${t.ch>0?P:E}.`:`Waage: links die positive Ladung der ${P}, rechts die negative Ladung der ${E}. Stelle zuerst die Ladungsbilanz auf.`}</p>`;
+}
+function gfx(t){
+ if(s===0&&(hint>=2||solved))return `<div class="pair">${fig(t.z,t.z,{hi:t.ve,cap:`${t.n}-Atom<br>${cfg(t.z).length} Schalen`})}</div><p class="note">Orange: die ${t.ve} Valenzelektronen auf der äußersten besetzten Schale.</p>`;
+ if(s===1&&(solved||hint>=3))return trio(t);
+ if(s===2&&(hint>=1||solved))return `<div class="pair">${fig(t.z,t.z,t.don?{hi:t.k,dash:1,cap:`${t.n}-Atom`}:{ghost:t.k,cap:`${t.n}-Atom`})}</div><p class="note">${t.don?`Orange: Diese ${t.k} ${E} (alle Valenzelektronen) werden abgegeben.`:`Gestrichelt: Hier fehlen ${t.k} ${E} bis zur voll besetzten äußersten Schale (Edelgaskonfiguration).`}</p>`;
+ if(s===3)return waage(t)+(solved?`<div class="pair">${fig(t.z,t.y,{hi:t.don?0:t.k,cap:`${ion(t)}-Ion<br>${t.z} ${P}, ${t.y} ${E}`})}</div>`:"");
+ return "";
+}
+function render(){
+ const el=document.getElementById("task");
+ if(end){pse(null);return result(el)}
+ const t=T[ti],S=steps(t);pse(t);
+ let h=`<h2>Aufgabe ${ti+1} von ${T.length}: ${t.n}</h2><div class="chips">${NAMES.map((n,i)=>`<span class="chip ${over||i<s?"done":i===s?"cur":""}">${n}</span>`).join("")}</div>`;
+ ans.forEach(a=>h+=`<p class="recap">✓ ${a}</p>`);
+ if(over){
+  h+=`<div class="fb ok"><p class="ion">${ion(t)}</p><p>${t.n} ${t.don?"gibt":"nimmt"} ${t.k} ${E} ${t.don?"ab":"auf"}. Es entsteht ein ${t.don?"positiv geladenes Ion (Kation)":"negativ geladenes Ion (Anion)"}.</p></div>
+  <div class="row"><button class="main" onclick="nextTask()">${ti<T.length-1?"Nächste Aufgabe":"Auswertung ansehen"}</button></div>`;
+  el.innerHTML=h;return;
+ }
+ const c=S[s];
+ h+=`<p class="q">${c.q}</p>`;
+ if(s>=1)h+=ex(t,s>1||hint>=2||(s===1&&solved));
+ if(c.dots)h+=dots(t);
+ h+=gfx(t);
+ h+=`<div class="opts ${c.wide?"w":""}">`+c.opts.map((o,i)=>{
+   const cl=solved&&o.v===c.ok?"right":(picked===i&&!solved&&o.v!==c.ok)?"wrong":"";
+   return `<button class="${cl}" ${solved?"disabled":""} onclick="pick(${i})">${o.l}</button>`}).join("")+"</div>";
+ if(fb)h+=`<div class="fb ${fb.k}">${fb.t}</div>`;
+ for(let i=0;i<hint;i++)h+=`<div class="tip"><b>Tipp ${i+1}:</b> ${c.tips[i]}</div>`;
+ h+='<div class="row">';
+ if(solved)h+=`<button class="main" onclick="nextStep()">${s<3?"Weiter":"Ergebnis ansehen"}</button>`;
+ else if(hint<3)h+=`<button onclick="moreHint()">Tipp anzeigen</button>`;
+ else h+=`<button onclick="showSol()">Lösung zeigen</button>`;
+ h+="</div>";
+ el.innerHTML=h;
+}
+function pick(i){
+ if(solved)return;
+ const c=steps(T[ti])[s],o=c.opts[i];picked=i;
+ if(o.v===c.ok){solved=true;fb={k:"ok",t:c.done};}
+ else{err[ti][s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+c.bad(o.v)};}
+ render();
+}
+function moreHint(){hint=Math.min(3,hint+1);render()}
+function showSol(){const c=steps(T[ti])[s];err[ti][s]=true;solved=true;picked=null;fb={k:"ok",t:"Lösung: "+c.sol,sol:true};render()}
+function nextStep(){
+ const c=steps(T[ti])[s];
+ ans.push(fb&&fb.sol?c.sol:c.done.replace(/^Richtig: /,""));
+ s++;hint=0;solved=false;fb=null;picked=null;
+ if(s>3)over=true;
+ render();
+}
+function nextTask(){
+ ti++;s=0;hint=0;solved=false;fb=null;picked=null;ans=[];over=false;
+ if(ti>=T.length)end=true;
+ render();window.scrollTo({top:document.getElementById("task").offsetTop-10});
+}
+function result(el){
+ let h=`<h2>Deine Auswertung</h2><p>So sicher bist du bei den vier Teilschritten:</p><table class="res">`;
+ SK.forEach((k,j)=>{
+  const n=err.filter(e=>e[j]).length,g=n===0?"g":n===1?"y":"r",lab=n===0?"✓ sicher":n===1?"~ fast sicher":"! noch üben";
+  h+=`<tr><td><b>${k[0]}</b></td><td><span class="amp ${g}">${lab}</span></td></tr>
+  <tr><td colspan="2" style="border-top:0;padding-top:0">${n===0?"Das kannst du schon.":`Webseite: zurück zu ${k[1]} ${k[1].startsWith("Baustein 6")?'<button onclick="restart()" style="min-height:32px;padding:2px 10px">Noch einmal</button>':'<a href="baustein'+k[1].match(/\d/)[0]+'.html">Baustein öffnen</a>'}<br>Arbeitsblatt: ${k[2]}`}</td></tr>`;
+ });
+ h+=`</table><p class="note">Bei mehreren Lücken beginnst du beim frühesten Baustein in der Liste, weil die späteren darauf aufbauen. Weiter geht es mit <a href="baustein7.html">Baustein 7: Ionenformel, Teilgleichung und Wortgleichung</a>.</p><div class="row"><button class="main" onclick="restart()">Noch einmal beginnen</button></div>`;
+ el.innerHTML=h;
+}
+function restart(){ti=0;s=0;hint=0;solved=false;fb=null;over=false;end=false;picked=null;ans=[];err=T.map(()=>[false,false,false,false]);render()}
+render();
+</script>
+</body>
+</html>

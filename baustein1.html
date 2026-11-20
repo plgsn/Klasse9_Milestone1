@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baustein 1: Einstieg Natrium und Chlor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a> · <a href="wissenscheck.html">Wissenscheck</a></p>
+<h1>Baustein 1: Einstieg Natrium und Chlor</h1>
+<p class="sub">Ich kann die Reaktion von Natrium mit Chlor beschreiben, Beobachtung und Deutung trennen und erkennen, dass ein neuer Stoff entsteht.</p>
+
+<section class="card">
+<h2>Schau dir zuerst den Versuch an</h2>
+<p>Starte den Trickfilm zur Reaktion von Natrium mit Chlor und schau dir zuerst den Ablauf an (in der Animation unten rechts: Video). Mit den Feldern unten links kannst du andere Ansichten wählen.</p>
+<p><a href="https://www.chemie-interaktiv.net/html5_flash/nacl_synthese_5.html" target="_blank" rel="noopener">Trickfilm zur Natrium-Chlor-Synthese (externe Seite, öffnet in einem neuen Tab)</a></p>
+<p class="sub">Die Skizzen auf dieser Seite helfen dir beim Erinnern. Sie ersetzen den Trickfilm nicht.</p>
+</section>
+
+<section class="card merke">
+<h2>Merke</h2>
+<p><b>Beobachtung:</b> Das, was du sehen, hören oder riechen kannst, ohne es zu erklären.<br>
+<b>Deutung:</b> Eine Erklärung oder Schlussfolgerung, die du aus den Beobachtungen ziehst.</p>
+<p><b>Neuer Stoff:</b> Ein Stoff, der andere Eigenschaften hat als die Stoffe vor der Reaktion (z. B. Farbe, Aggregatzustand, Glanz).</p>
+</section>
+
+<section class="card" id="task"></section>
+<nav class="navbot"><a href="index.html">← Startseite</a><a href="baustein2.html">Baustein 2: Atombau und Valenzelektronen →</a></nav>
+</main>
+
+<script>
+const AMB="#e39b13";
+const SW=k=>{
+ const g={na:`<defs><linearGradient id="gn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfd5dc"/><stop offset="1" stop-color="#7d8793"/></linearGradient></defs><rect x="22" y="18" width="76" height="44" rx="8" fill="url(#gn)"/><path d="M31 29 L62 25" stroke="#fff" stroke-opacity=".75" stroke-width="3" stroke-linecap="round"/>`,
+  cl:`<defs><radialGradient id="gc"><stop offset="0" stop-color="#cfe8a8" stop-opacity=".95"/><stop offset="1" stop-color="#cfe8a8" stop-opacity="0"/></radialGradient></defs><circle cx="60" cy="40" r="36" fill="url(#gc)"/><circle cx="44" cy="46" r="20" fill="url(#gc)"/><circle cx="76" cy="34" r="20" fill="url(#gc)"/>`,
+  nacl:[[28,40],[48,48],[68,38],[86,50],[40,26],[60,24],[78,26],[52,60],[72,58]].map(([x,y])=>`<rect x="${x}" y="${y}" width="14" height="14" rx="2" fill="#fff" stroke="#9aa6b2" stroke-width="1.5"/>`).join("")}[k];
+ return `<svg viewBox="0 0 120 80" role="img" aria-label="Skizze"><title>Skizze</title>${g}</svg>`;
+};
+const swFig=(k,c)=>`<figure>${SW(k)}<figcaption>${c}</figcaption></figure>`;
+function tube(p,c){
+ const w=`<path d="M34 12 V138 a26 26 0 0 0 52 0 V12" fill="none" stroke="var(--mut)" stroke-width="3"/>`;
+ const bead=`<circle cx="60" cy="152" r="13" fill="#c9d0d8" stroke="#e58a1f" stroke-width="3"/>`;
+ const b=[
+  `<circle cx="60" cy="150" r="24" fill="#ffb24d" opacity=".35"/>${bead}`,
+  `<rect x="37" y="40" width="46" height="124" rx="6" fill="#cfe8b0" opacity=".6"/>${bead}<path d="M60 4 v22 m-6 -8 l6 8 l6 -8" stroke="#6aa33a" stroke-width="3" fill="none"/>`,
+  `<circle cx="60" cy="145" r="30" fill="#fff7c2" stroke="#f2b134" stroke-width="3"/><path d="M60 105 v80 M20 145 h80 M32 117 l56 56 M88 117 l-56 56" stroke="#f2b134" stroke-width="2"/>`,
+  `<ellipse cx="52" cy="62" rx="14" ry="22" fill="var(--card)" stroke="var(--line)"/><ellipse cx="70" cy="40" rx="12" ry="18" fill="var(--card)" stroke="var(--line)"/><rect x="34" y="72" width="7" height="50" fill="var(--card)" stroke="var(--line)"/><circle cx="60" cy="158" r="11" fill="#8d96a1"/>`][p];
+ return `<figure><svg viewBox="0 0 120 180" role="img" aria-label="Skizze Reagenzglas"><title>Skizze Reagenzglas</title>${b}${w}</svg><figcaption>${c}</figcaption></figure>`;
+}
+
+const EV=[
+ "Das Natriumstück wird erwärmt und schmilzt zu einer Kugel.",
+ "Das Natrium fließt auseinander und wird an der Oberfläche gasförmig.",
+ "Chlorgas strömt ein und trifft auf das Natrium.",
+ "Es entsteht eine weiße, grelle Flamme. Sie wird ohne weiteres Erwärmen immer intensiver.",
+ "Weißer Rauch steigt auf. Am Ende liegen Feststoffe im Reagenzglas."
+];
+const PERM=[2,4,0,3,1];
+const ST=[
+ {t:"Das Natriumstück schmilzt zu einer Kugel.",k:"b"},
+ {t:"Beim Kontakt mit dem Chlorgas entsteht eine weiße, grelle Flamme.",k:"b"},
+ {t:"Weißer Rauch steigt im Reagenzglas auf.",k:"b"},
+ {t:"An der Glaswand bildet sich ein weißer Feststoff.",k:"b"},
+ {t:"Das Natrium verbrennt.",k:"d"},
+ {t:"Es entsteht ein neuer Stoff.",k:"d"},
+ {t:"Die Reaktion setzt Energie frei.",k:"d"},
+ {t:"Natrium und Chlor haben sich chemisch verändert.",k:"d"}
+];
+const PERM2=[3,6,1,4,7,0,5,2];
+const NEW=[
+ {l:"Der weiße Feststoff hat andere Eigenschaften als Natrium (grau, glänzend) und Chlor (Gas).",v:"ok"},
+ {l:"Das Natrium wurde erwärmt und ist geschmolzen.",v:"sch"},
+ {l:"Es gab eine Flamme.",v:"fl"},
+ {l:"Die Stoffe sind einfach verschwunden.",v:"ver"}
+];
+const PN=[2,0,3,1];
+const BANK=["grauer, glänzender Feststoff","blassgrünes, fast farbloses Gas","weißer Feststoff","farblose Flüssigkeit"];
+const rot=(a,i)=>a.map((_,j)=>a[(j+i)%a.length]);
+
+const S=[
+ {nm:"Vorher",type:"gaps",q:"Wie sehen die Stoffe vor der Reaktion aus? Wähle für jeden Stoff die passende Beschreibung.",
+  gaps:[{lab:"Natrium",ok:BANK[0]},{lab:"Chlor",ok:BANK[1]}],
+  tips:["Schau dir den Trickfilm an oder die Skizzen. Achte auf Farbe, Glanz und darauf, ob der Stoff fest, flüssig oder gasförmig ist.",
+        "Natrium ist ein Metall: fest und glänzend. Chlor ist bei Raumtemperatur ein Gas. Mit diesem Tipp erscheinen die Skizzen der Stoffe.",
+        "Beispiel Wasser: farblose Flüssigkeit. Beschreibe Natrium und Chlor in derselben Weise."],
+  badGap:["Natrium ist ein Metall. Wie sieht es aus, und ist es fest, flüssig oder gasförmig?","Chlor ist bei Raumtemperatur ein Gas. Welche Farbe hat es?"],
+  sol:"Natrium: grauer, glänzender Feststoff. Chlor: blassgrünes, fast farbloses Gas.",done:"Richtig: Natrium ist ein grauer, glänzender Feststoff, Chlor ein blassgrünes, fast farbloses Gas."},
+ {nm:"Ablauf",type:"order",q:"Bringe die Beobachtungen in die richtige Reihenfolge. Klicke sie nacheinander an.",
+  tips:["Überlege: Was passiert mit dem Natrium zuerst, wenn es erwärmt wird?","Die Flamme entsteht erst, wenn Chlorgas auf das Natrium trifft. Der Rauch steigt erst auf, wenn die Flamme brennt. Mit diesem Tipp erscheinen die Skizzen des Ablaufs.","Beispiel Kerze: Docht anzünden, Wachs schmilzt, Flamme brennt, Ruß entsteht. Ordne den Versuch ebenso."],
+  sol:EV.map((e,i)=>`${i+1}. ${e}`).join("<br>"),done:"Richtig: Das ist der Ablauf des Versuchs."},
+ {nm:"Beobachtung oder Deutung?",type:"classify",q:"Ordne jede Aussage zu: Ist sie eine Beobachtung oder eine Deutung?",
+  tips:["Beobachtung: Das kannst du sehen, hören oder riechen. Deutung: Eine Erklärung oder Schlussfolgerung.","Frage dich bei jeder Aussage: Habe ich das im Trickfilm direkt gesehen, oder erkläre ich etwas?","Beispiel: „Blasen steigen auf“ ist eine Beobachtung. „Das Wasser siedet“ ist eine Deutung."],
+  sol:"Beobachtungen: Schmelzen zur Kugel, weiße Flamme, weißer Rauch, weißer Feststoff an der Glaswand. Deutungen: Natrium verbrennt, neuer Stoff, Energie frei, chemische Veränderung.",done:"Richtig: Alle Aussagen sind richtig zugeordnet."},
+ {nm:"Neuer Stoff",type:"choice",q:"Woran erkennst du in diesem Versuch, dass ein neuer Stoff entstanden ist?",opts:NEW,ok:"ok",
+  tips:["Ein neuer Stoff hat andere Eigenschaften als die Stoffe vor der Reaktion.","Vergleiche: Wie sehen Natrium und Chlor vorher aus, und wie sieht der Feststoff an der Glaswand aus?","Beispiel: Aus Zucker und Hitze entsteht Karamell. Karamell hat andere Eigenschaften als Zucker. Das zeigt den neuen Stoff."],
+  sol:NEW[0].l,
+  bad:v=>v==="sch"?"Schmelzen ist nur eine Änderung des Aggregatzustands. Natrium bleibt dabei Natrium.":v==="fl"?"Eine Flamme zeigt, dass Energie frei wird. Einen neuen Stoff erkennt man an neuen Eigenschaften.":"Stoffe verschwinden nicht. Sie wandeln sich in andere Stoffe um.",
+  done:"Richtig: Der weiße Feststoff hat neue Eigenschaften. Es ist ein neuer Stoff (Natriumchlorid, Kochsalz)."}
+];
+const SK=[
+ ["Das Aussehen der Stoffe vor der Reaktion beschreiben","AB 1, Aufgabe 1"],
+ ["Den Ablauf der Reaktion in der richtigen Reihenfolge wiedergeben","AB 1, Aufgabe 1"],
+ ["Beobachtung und Deutung trennen","AB 1, Aufgabe 1"],
+ ["Einen neuen Stoff erkennen","AB 1, Aufgabe 1"]
+];
+
+let s=0,hint=0,solved=false,fb=null,over=false,end=false,picked=null,ans=[],sel=[],cl=[],chk=[],err=[false,false,false,false];
+
+function gfx(){
+ const h2=hint>=2||solved;
+ if(s===0&&h2)return `<div class="film sw">${swFig("na","Natrium")}${swFig("cl","Chlor")}</div>`;
+ if(s===1&&h2)return `<div class="film">${[0,1,2,3].map(p=>tube(p,["Erwärmen, Natrium schmilzt","Chlorgas strömt ein","Weiße, grelle Flamme","Rauch und Feststoffe"][p])).join("")}</div>`;
+ if(s===3&&solved)return `<div class="film sw">${swFig("na","Natrium<br>grau, glänzend")}<div class="mid">+</div>${swFig("cl","Chlor<br>blassgrünes Gas")}<div class="mid">→</div>${swFig("nacl","weißer Feststoff<br>neuer Stoff")}</div>`;
+ return "";
+}
+function ui(c){
+ if(c.type==="choice")return `<div class="opts w">`+PN.map(i=>c.opts[i]).map((o)=>{const cc=solved&&o.v===c.ok?"right":(picked===o.v&&!solved)?"wrong":"";return `<button class="${cc}" ${solved?"disabled":""} onclick="pick('${o.v}')">${o.l}</button>`}).join("")+"</div>";
+ if(c.type==="gaps")return c.gaps.map((g,j)=>`<p class="cloze"><b>${g.lab}:</b> <select class="${chk[j]===true?"right":chk[j]===false?"wrong":""}" ${solved?"disabled":""} onchange="setSel(${j},this.value)"><option value="">…</option>${rot(BANK,j).map(x=>`<option ${sel[j]===x?"selected":""}>${x}</option>`).join("")}</select></p>`).join("");
+ if(c.type==="order"){
+  let h=`<ol class="seq">`+sel.map(j=>`<li>${EV[PERM[j]]}</li>`).join("")+"</ol>";
+  h+=`<div class="opts w">`+PERM.map((id,j)=>`<button ${solved||sel.includes(j)?"disabled":""} onclick="addEv(${j})">${EV[id]}</button>`).join("")+"</div>";
+  if(!solved)h+=`<div class="row"><button onclick="sel.pop();fb=null;render()">Zurück</button><button onclick="sel=[];fb=null;render()">Löschen</button></div>`;
+  return h;
+ }
+ if(c.type==="classify")return `<ul class="stmts">`+PERM2.map(id=>{const it=ST[id],v=cl[id],st=chk[id]===true?"right":chk[id]===false?"wrong":"";
+  return `<li class="${st}"><span>${it.t}</span><span class="seg"><button class="${v==="b"?"on":""}" ${solved?"disabled":""} onclick="setCl(${id},'b')">Beobachtung</button> <button class="${v==="d"?"on":""}" ${solved?"disabled":""} onclick="setCl(${id},'d')">Deutung</button></span></li>`}).join("")+"</ul>";
+}
+function render(){
+ const el=document.getElementById("task");
+ if(end)return result(el);
+ let h=`<h2>Aufgabe: Natrium reagiert mit Chlor</h2><div class="chips">${S.map((x,i)=>`<span class="chip ${over||i<s?"done":i===s?"cur":""}">${x.nm}</span>`).join("")}</div>`;
+ ans.forEach(a=>h+=`<p class="recap">✓ ${a}</p>`);
+ if(over){
+  h+=`<div class="fb ok"><b>Das weißt du jetzt</b><div class="film sw">${swFig("na","Natrium")}<div class="mid">+</div>${swFig("cl","Chlor")}<div class="mid">→</div>${swFig("nacl","weißer Feststoff")}</div>
+  <p>Natrium (grauer, glänzender Feststoff) reagiert mit Chlor (blassgrünes Gas). Es gibt eine weiße, grelle Flamme und weißen Rauch. Am Ende entsteht ein weißer Feststoff, ein neuer Stoff mit neuen Eigenschaften.</p>
+  <p>Offen bleibt die Frage: Was passiert dabei mit den kleinsten Teilchen? Das klären die nächsten Bausteine.</p></div>
+  <div class="row"><button class="main" onclick="end=true;render()">Auswertung ansehen</button></div>`;
+  el.innerHTML=h;return;
+ }
+ const c=S[s];
+ h+=`<p class="q">${c.q}</p>`+gfx()+ui(c);
+ if(fb)h+=`<div class="fb ${fb.k}">${fb.t}</div>`;
+ for(let i=0;i<hint;i++)h+=`<div class="tip"><b>Tipp ${i+1}:</b> ${c.tips[i]}</div>`;
+ h+='<div class="row">';
+ if(solved)h+=`<button class="main" onclick="nextStep()">${s<S.length-1?"Weiter":"Ergebnis ansehen"}</button>`;
+ else{
+  if(c.type!=="choice")h+=`<button class="main" onclick="check()">Prüfen</button>`;
+  if(hint<3)h+=`<button onclick="moreHint()">Tipp anzeigen</button>`;
+  else h+=`<button onclick="showSol()">Lösung zeigen</button>`;
+ }
+ h+="</div>";
+ el.innerHTML=h;
+}
+function wrong(msg){err[s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+msg};render()}
+function info(msg){fb={k:"bad",t:msg};render()}
+function setSel(j,v){sel[j]=v;chk[j]=undefined}
+function setCl(id,v){if(solved)return;cl[id]=v;chk[id]=undefined;fb=null;render()}
+function addEv(j){if(solved||sel.includes(j)||sel.length>=5)return;sel.push(j);fb=null;render()}
+function pick(v){
+ if(solved)return;const c=S[s];picked=v;
+ if(v===c.ok){solved=true;fb={k:"ok",t:c.done};render()}else wrong(c.bad(v));
+}
+function check(){
+ const c=S[s];
+ if(c.type==="gaps"){
+  if(c.gaps.some((g,j)=>!sel[j]))return info("Wähle für beide Stoffe eine Beschreibung.");
+  chk=c.gaps.map((g,j)=>sel[j]===g.ok);
+  if(chk.every(Boolean)){solved=true;fb={k:"ok",t:c.done};render()}else wrong(c.badGap[chk.indexOf(false)]);
+ }else if(c.type==="order"){
+  if(sel.length<5)return info("Wähle alle fünf Beobachtungen aus.");
+  const g=sel.map(j=>PERM[j]);
+  if(g.every((x,i)=>x===i)){solved=true;fb={k:"ok",t:c.done};render()}
+  else wrong(g.indexOf(3)<g.indexOf(2)?"Die Flamme entsteht erst, wenn Chlorgas auf das Natrium trifft.":g.indexOf(4)<g.indexOf(3)?"Der Rauch steigt erst auf, wenn die Flamme brennt.":"Die Reihenfolge stimmt noch nicht. Was passiert zuerst, was zuletzt?");
+ }else if(c.type==="classify"){
+  if(ST.some((x,i)=>!cl[i]))return info("Ordne alle Aussagen zu.");
+  chk=ST.map((x,i)=>cl[i]===x.k);
+  if(chk.every(Boolean)){solved=true;fb={k:"ok",t:c.done};render()}
+  else{const i=chk.indexOf(false);wrong(ST[i].k==="d"?`„${ST[i].t}“ ist eine Erklärung, nichts, was man direkt sieht: eine Deutung.`:`„${ST[i].t}“ kann man direkt sehen: eine Beobachtung.`)}
+ }
+}
+function moreHint(){hint=Math.min(3,hint+1);render()}
+function showSol(){
+ const c=S[s];err[s]=true;solved=true;picked=null;
+ if(c.type==="gaps"){sel=c.gaps.map(g=>g.ok);chk=sel.map(()=>true)}
+ if(c.type==="order"){sel=[0,1,2,3,4].map(id=>PERM.indexOf(id))}
+ if(c.type==="classify"){ST.forEach((x,i)=>cl[i]=x.k);chk=ST.map(()=>true)}
+ fb={k:"ok",t:"Lösung: "+c.sol,sol:true};render();
+}
+function nextStep(){
+ const c=S[s];
+ ans.push(fb&&fb.sol?"Lösung angesehen":c.done.replace(/^Richtig: /,""));
+ s++;hint=0;solved=false;fb=null;picked=null;sel=[];cl=[];chk=[];
+ if(s>=S.length)over=true;
+ render();
+}
+function result(el){
+ let h=`<h2>Deine Auswertung</h2><p>So sicher bist du bei den vier Teilschritten:</p><table class="res">`;
+ SK.forEach((k,j)=>{
+  const n=err[j]?1:0,gr=n===0?"g":"y",lab=n===0?"✓ sicher":"~ noch einmal ansehen";
+  h+=`<tr><td><b>${k[0]}</b></td><td><span class="amp ${gr}">${lab}</span></td></tr>
+  <tr><td colspan="2" style="border-top:0;padding-top:0">${n===0?"Das kannst du schon.":`Webseite: Diesen Baustein noch einmal durcharbeiten <button onclick="restart()" style="min-height:32px;padding:2px 10px">Noch einmal</button><br>Arbeitsblatt: ${k[1]}`}</td></tr>`;
+ });
+ h+=`</table><p class="note">Weiter geht es mit <a href="baustein2.html">Baustein 2: Atombau und Valenzelektronen</a>.</p><div class="row"><button class="main" onclick="restart()">Noch einmal beginnen</button></div>`;
+ el.innerHTML=h;
+}
+function restart(){s=0;hint=0;solved=false;fb=null;over=false;end=false;picked=null;ans=[];sel=[];cl=[];chk=[];err=[false,false,false,false];render()}
+render();
+</script>
+</body>
+</html>

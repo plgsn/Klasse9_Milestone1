@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baustein 7: Ionenformel, Teilgleichung und Wortgleichung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a> · <a href="wissenscheck.html">Wissenscheck</a></p>
+<h1>Baustein 7: Ionenformel, Teilgleichung und Wortgleichung</h1>
+<p class="sub">Ich kann Ionen in Formelschreibweise darstellen und die Ionenbildung als Teilgleichung und als Wortgleichung aufschreiben (Donator und Akzeptor).</p>
+
+<section class="card merke">
+<h2>Merke</h2>
+<p><b>Ionenformel:</b> Das Symbol bekommt die Ladung oben rechts. Zuerst die Zahl, dann das Vorzeichen: Mg<sup>2+</sup>, O<sup>2−</sup>. Bei der Ladung 1 entfällt die 1: Na<sup>+</sup>, Cl<sup>−</sup>.</p>
+<p><b>Donator</b> (gibt e<sup>−</sup> ab): Atom → Kation + e<sup>−</sup>. Die e<sup>−</sup> werden frei und stehen <b>rechts</b> vom Pfeil.<br>
+<b>Akzeptor</b> (nimmt e<sup>−</sup> auf): Atom + e<sup>−</sup> → Anion. Die e<sup>−</sup> werden aufgenommen und stehen <b>links</b> vom Pfeil.</p>
+<p><b>Ladungsbilanz:</b> Die Summe der Ladungen links vom Pfeil ist gleich der Summe der Ladungen rechts.</p>
+<p><b>Wortgleichung:</b> Alle Teilchen werden mit Namen benannt. Anionen enden auf <i>-id</i>: Chlorid, Oxid.</p>
+<p class="sub">Diese Schreibweise mit Donator, Akzeptor und e<sup>−</sup> brauchst du später in der Elektrochemie wieder.</p>
+</section>
+
+<details class="card" open>
+<summary>Beispiele vorgerechnet: Natrium (Donator) und Chlor (Akzeptor)</summary>
+<ol>
+<li>Ionenformel Natrium: <b>Na<sup>+</sup></b>. Natrium ist der <b>Donator</b>.</li>
+<li>Teilgleichung: <b>Na → Na<sup>+</sup> + e<sup>−</sup></b>. Ladungsbilanz: links 0, rechts (+1) + (−1) = 0.</li>
+<li>Wortgleichung: <b>Natrium-Atom → Natrium-Ion + Elektron</b></li>
+<li>Zum Vergleich ein Akzeptor: <b>Cl + e<sup>−</sup> → Cl<sup>−</sup></b>, in Worten: <b>Chlor-Atom + Elektron → Chlorid-Ion</b>. Ladungsbilanz: links (−1), rechts (−1).</li>
+</ol>
+</details>
+
+<section class="card" id="task"></section>
+<nav class="navbot"><a href="baustein6.html">← Baustein 6: Ionenladung mit dem PSE bestimmen</a><a href="wissenscheck.html">Zum Wissenscheck →</a></nav>
+</main>
+
+<script>
+const R=[["H","","","","","","","He"],["Li","Be","B","C","N","O","F","Ne"],["Na","Mg","Al","Si","P","S","Cl","Ar"],["K","Ca","Ga","Ge","As","Se","Br","Kr"]];
+const Z={Na:11,Cl:17,Mg:12,O:8,Al:13};
+const E="e<sup>−</sup>",P="p<sup>+</sup>",AMB="#e39b13";
+const cfg=n=>{const o=[];let r=n;for(const c of [2,8,8,18]){if(r<=0)break;const m=Math.min(c,r);o.push(m);r-=m}return o};
+const last=a=>a[a.length-1];
+const ANI={Chlor:"Chlorid",Sauerstoff:"Oxid"};
+const mk=(n,s)=>{
+ const z=Z[s],ve=last(cfg(z)),don=ve<8-ve,k=Math.min(ve,8-ve),ch=don?k:-k;
+ return{n,s,z,ve,don,k,ch,y:z-ch,ns:cfg(z).length,nsI:cfg(z-ch).length,ionName:`${don?n:ANI[n]||n}-Ion`};
+};
+const T=[["Natrium","Na"],["Chlor","Cl"],["Magnesium","Mg"],["Sauerstoff","O"],["Aluminium","Al"]].map(a=>mk(...a));
+const SK=[
+ ["Ionen in Formelschreibweise darstellen","AB 4, Aufgabe 3"],
+ ["Donator und Akzeptor zuordnen","noch kein Arbeitsblatt"],
+ ["Die Teilgleichung mit "+E+" aufstellen","noch kein Arbeitsblatt"],
+ ["Die Ionenbildung als Wortgleichung aufschreiben","noch kein Arbeitsblatt"]
+];
+const sgn=t=>t.ch>0?"+":"−";
+const sup=(s,n,g)=>`${s}<sup>${n}${g}</sup>`;
+const ion=t=>sup(t.s,t.k>1?t.k:"",sgn(t));
+const ek=t=>t.k>1?`${t.k} ${E}`:E;
+const eq=t=>t.don?`${t.s} → ${ion(t)} + ${ek(t)}`:`${t.s} + ${ek(t)} → ${ion(t)}`;
+const rot=(a,i)=>a.map((_,j)=>a[(j+i)%a.length]);
+const pos=(i,j,m)=>{const a=-Math.PI/2+j*2*Math.PI/m+(i%2?Math.PI/m:0),r=30+16*i;return[85+r*Math.cos(a),85+r*Math.sin(a)]};
+
+function fig(z,e,o={}){
+ const sh=cfg(e),ns=sh.length;
+ let h=`<circle cx="85" cy="85" r="18" fill="var(--pro)"/><text x="85" y="89" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const rad=30+16*i,lst=i===ns-1,gh=lst&&o.ghost?o.ghost:0,m=n+gh,dsh=lst&&o.dash;
+  h+=`<circle cx="85" cy="85" r="${rad}" fill="none" stroke="${dsh?AMB:"var(--mut)"}" stroke-opacity="${dsh?1:.45}" stroke-width="${dsh?2.5:1.5}" ${dsh?'stroke-dasharray="5 4"':""}/>`;
+  for(let j=0;j<m;j++){
+   const[x,y]=pos(i,j,m).map(v=>v.toFixed(1));
+   if(j<n){const hi=lst&&o.hi&&j>=n-o.hi;h+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${hi?AMB:"var(--ele)"}" stroke="var(--card)" stroke-width="1"/>`}
+   else h+=`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+  }
+ });
+ return `<figure><svg viewBox="0 0 170 170" role="img" aria-label="Schalenmodell"><title>Schalenmodell</title>${h}</svg><figcaption>${o.cap||""}</figcaption></figure>`;
+}
+const atomFig=(t,cap)=>fig(t.z,t.z,t.don?{hi:t.k,dash:1,cap}:{ghost:t.k,cap});
+const ionFig=(t,cap)=>fig(t.z,t.y,{hi:t.don?0:t.k,cap});
+const mid=t=>`<div class="mid">→<small>${t.k} ${E} ${t.don?"abgegeben":"aufgenommen"}</small></div>`;
+
+function setup(t,i){
+ const k=t.k,tk=(id,l,c)=>({id,l,c:c||""});
+ const bank=rot([tk("A",t.s),tk("R","→"),tk("P","+"),tk("I",ion(t)),tk("E",ek(t),"el"),
+  tk("Iw",sup(t.s,k>1?k:"",t.don?"−":"+")),tk("Ew",`${k+1} ${E}`,"el")],i+1);
+ return{bank,exp:t.don?["A","R","I","P","E"]:["A","P","E","R","I"]};
+}
+function steps(t,i){
+ const don=t.don,k=t.k,sg=sgn(t),osg=don?"−":"+",n=t.n;
+ const rows=[
+  {l:sup(t.s,k>1?k:"",sg),v:"ok"},
+  {l:k>1?sup(t.s,sg+k,""):sup(t.s,"1"+sg,""),v:"ord"},
+  {l:sup(t.s,k>1?k:"",osg),v:"sg"},
+  {l:sup(t.s,k+1,sg),v:"num"}
+ ];
+ const ew=k>1?`${k} Elektronen`:"Elektron",pw=k>1?`${k} Protonen`:"Proton",at=`${n}-Atom`,io=t.ionName;
+ const w=[{l:don?`${at} → ${io} + ${ew}`:`${at} + ${ew} → ${io}`,v:"ok"},
+  {l:don?`${at} + ${ew} → ${io}`:`${at} → ${io} + ${ew}`,v:"sw"},
+  {l:`${at} → ${io}`,v:"mi"},
+  {l:don?`${at} → ${io} + ${pw}`:`${at} + ${pw} → ${io}`,v:"pr"}];
+ return[
+ {nm:"Ionenformel",q:`Welche Ionenformel hat das Ion, das aus dem ${n}-Atom entsteht (${t.z} ${P}, ${t.y} ${E})?`,wide:true,opts:rot(rows,i),ok:"ok",
+  tips:[`Die Ladung steht oben rechts am Symbol. Die Zahl der übertragenen ${E} ergibt die Zahl der Ladungen.`,
+        `Abgabe von ${E} ergibt ein positives Ion (Vorzeichen +), Aufnahme ein negatives Ion (Vorzeichen −). Schreibe zuerst die Zahl, dann das Vorzeichen.`,
+        `Beispiele: Aluminium gibt 3 ${E} ab: Al<sup>3+</sup>. Fluor nimmt 1 ${E} auf: F<sup>−</sup> (bei der Ladung 1 entfällt die 1).`],
+  sol:`Das ${n}-Atom ${don?"gibt":"nimmt"} ${k} ${E} ${don?"ab":"auf"}: ${ion(t)}.`,
+  bad:v=>v==="ord"?`Zuerst die Zahl, dann das Vorzeichen. Bei der Ladung 1 schreibt man nur das Vorzeichen.`:v==="sg"?`Prüfe das Vorzeichen: ${don?"Abgabe von "+E+" ergibt +":"Aufnahme von "+E+" ergibt −"}.`:`Die Zahl der Ladungen ist die Zahl der übertragenen ${E}: ${k}.`,
+  done:`Richtig: ${ion(t)}.`},
+ {nm:"Donator oder Akzeptor?",q:`Das ${n}-Atom bildet das Ion ${ion(t)}. Welche Rolle hat es?`,wide:true,ok:don?"d":"a",
+  opts:rot([{l:`Donator: gibt ${E} ab`,v:"d"},{l:`Akzeptor: nimmt ${E} auf`,v:"a"}],i),
+  tips:[`Der Donator ist der Spender, der Akzeptor der Empfänger von ${E}.`,
+        `Ein Kation (positiv) entsteht durch Abgabe, ein Anion (negativ) durch Aufnahme von ${E}.`,
+        `Beispiel: Na<sup>+</sup> ist ein Kation, entstand durch Abgabe, Natrium ist also der Donator.`],
+  sol:`${ion(t)} ist ${don?"ein Kation (Abgabe): Donator":"ein Anion (Aufnahme): Akzeptor"}.`,
+  bad:()=>`Prüfe das Vorzeichen der Ladung: ${don?"Plus bedeutet Abgabe von "+E+", also Donator":"Minus bedeutet Aufnahme von "+E+", also Akzeptor"}.`,
+  done:`Richtig: ${don?"Donator":"Akzeptor"}.`},
+ {nm:"Teilgleichung",build:true,q:`Stelle die Teilgleichung für die Bildung von ${ion(t)} zusammen. Klicke die Bausteine in der richtigen Reihenfolge an.`,
+  tips:[don?`Donator: Atom → Ion + Elektronen. Die ${E} werden frei und stehen rechts vom Pfeil.`:`Akzeptor: Atom + Elektronen → Ion. Die ${E} werden aufgenommen und stehen links vom Pfeil.`,
+        `Reihenfolge: ${don?"Atom, Pfeil, Ion, Plus, Elektronen":"Atom, Plus, Elektronen, Pfeil, Ion"}. Die Zahl vor ${E} ist die Zahl der übertragenen ${E}.`,
+        `Beispiel: ${don?"Na → Na<sup>+</sup> + e<sup>−</sup>":"Cl + e<sup>−</sup> → Cl<sup>−</sup>"}`],
+  sol:eq(t),done:`Richtig: ${eq(t)}`},
+ {nm:"Wortgleichung",q:`Wie lautet die Wortgleichung zur Bildung des ${n}-Ions?`,wide:true,opts:rot(w,i),ok:"ok",
+  tips:[`Eine Wortgleichung benennt alle Teilchen mit Namen. Welche Teilchen werden bei der Ionenbildung übertragen?`,
+        `Beim Donator stehen die Elektronen rechts, beim Akzeptor links. Anionen enden auf -id (Chlorid, Oxid).`,
+        `Beispiel: Natrium-Atom → Natrium-Ion + Elektron`],
+  sol:w[0].l,
+  bad:v=>v==="sw"?`Die Elektronen stehen auf der falschen Seite. ${don?"Beim Donator stehen sie rechts vom Pfeil.":"Beim Akzeptor stehen sie links vom Pfeil."}`:v==="mi"?`Es fehlt etwas: Die übertragenen Elektronen müssen in der Gleichung stehen.`:`Es werden Elektronen übertragen, keine Protonen. Die Protonen bleiben im Kern.`,
+  done:`Richtig: ${w[0].l}`}
+ ];
+}
+
+let ti=0,s=0,hint=0,solved=false,fb=null,over=false,end=false,picked=null,ans=[],sel=[],err=T.map(()=>[false,false,false,false]);
+
+function bal(t){return t.don?`Ladungsbilanz: links 0, rechts (+${t.k}) + ${t.k} · (−1) = 0.`:`Ladungsbilanz: links 0 + ${t.k} · (−1) = −${t.k}, rechts −${t.k}.`}
+function gfx(t){
+ const h2=hint>=2||solved;
+ if(s===0&&h2)return `<div class="pair">${atomFig(t,`${t.n}-Atom`)}${mid(t)}${ionFig(t,`${ion(t)}`)}</div>`;
+ if(s===2&&h2)return `<p class="note">${bal(t)} Die Ladungssumme ist links und rechts gleich.</p>`;
+ if(s===3&&solved)return `<table class="res"><tr><td>Formel</td><td>${eq(t)}</td></tr><tr><td>Worte</td><td>${steps(t,ti)[3].sol}</td></tr></table>`;
+ return "";
+}
+function eqUI(t,c){
+ const {bank,exp}=setup(t,ti);
+ let h=`<div class="eqrow">`+exp.map((_,j)=>`<span class="slot ${sel[j]!==undefined?"f":""}">${sel[j]!==undefined?bank[sel[j]].l:""}</span>`).join("")+"</div>";
+ h+=`<div class="bank">`+bank.map((b,j)=>`<button class="tk ${b.c}" ${solved||sel.includes(j)?"disabled":""} onclick="addTok(${j})">${b.l}</button>`).join("")+"</div>";
+ if(!solved)h+=`<div class="row"><button onclick="undo()">Zurück</button><button onclick="clearEq()">Löschen</button></div>`;
+ return h;
+}
+function render(){
+ const el=document.getElementById("task");
+ if(end)return result(el);
+ const t=T[ti],S=steps(t,ti);
+ let h=`<h2>Aufgabe ${ti+1} von ${T.length}: ${t.n}</h2><div class="chips">${S.map((x,i)=>`<span class="chip ${over||i<s?"done":i===s?"cur":""}">${x.nm}</span>`).join("")}</div>`;
+ ans.forEach(a=>h+=`<p class="recap">✓ ${a}</p>`);
+ if(over){
+  h+=`<div class="fb ok"><b>Steckbrief: ${ion(t)} (${t.don?"Donator":"Akzeptor"})</b><div class="pair">${atomFig(t,`${t.n}-Atom`)}${mid(t)}${ionFig(t,ion(t))}</div><div class="fx">Teilgleichung: ${eq(t)}<br>Wortgleichung: ${S[3].sol}<br>${bal(t)}</div></div>
+  <div class="row"><button class="main" onclick="nextTask()">${ti<T.length-1?"Nächste Aufgabe":"Auswertung ansehen"}</button></div>`;
+  el.innerHTML=h;return;
+ }
+ const c=S[s];
+ h+=`<p class="q">${c.q}</p>`+gfx(t);
+ if(c.build)h+=eqUI(t,c);
+ else h+=`<div class="opts ${c.wide?"w":""}">`+c.opts.map((o,i)=>{
+   const cl=solved&&o.v===c.ok?"right":(picked===i&&!solved&&o.v!==c.ok)?"wrong":"";
+   return `<button class="${cl}" ${solved?"disabled":""} onclick="pick(${i})">${o.l}</button>`}).join("")+"</div>";
+ if(fb)h+=`<div class="fb ${fb.k}">${fb.t}</div>`;
+ for(let i=0;i<hint;i++)h+=`<div class="tip"><b>Tipp ${i+1}:</b> ${c.tips[i]}</div>`;
+ h+='<div class="row">';
+ if(solved)h+=`<button class="main" onclick="nextStep()">${s<S.length-1?"Weiter":"Ergebnis ansehen"}</button>`;
+ else{
+  if(c.build)h+=`<button class="main" onclick="checkEq()">Prüfen</button>`;
+  if(hint<3)h+=`<button onclick="moreHint()">Tipp anzeigen</button>`;
+  else h+=`<button onclick="showSol()">Lösung zeigen</button>`;
+ }
+ h+="</div>";
+ el.innerHTML=h;
+}
+function wrong(msg){err[ti][s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+msg};render()}
+function addTok(j){const {exp}=setup(T[ti],ti);if(solved||sel.includes(j)||sel.length>=exp.length)return;sel.push(j);fb=null;render()}
+function undo(){sel.pop();fb=null;render()}
+function clearEq(){sel=[];fb=null;render()}
+function checkEq(){
+ const t=T[ti],{bank,exp}=setup(t,ti),got=sel.map(j=>bank[j].id);
+ if(!got.length){fb={k:"bad",t:"Du hast noch keine Bausteine gewählt."};render();return}
+ if(got.includes("Iw"))return wrong(`Prüfe das Vorzeichen der Ladung: ${t.don?"Abgabe von "+E+" ergibt +":"Aufnahme von "+E+" ergibt −"}.`);
+ if(got.includes("Ew"))return wrong(`Die Zahl vor ${E} ist die Zahl der übertragenen Elektronen: ${t.k}.`);
+ if(got.length<exp.length)return wrong(`Die Gleichung ist noch nicht vollständig.`);
+ if(got.join()!==exp.join())return wrong(t.don?`Beim Donator stehen die Elektronen rechts vom Pfeil: Sie werden frei.`:`Beim Akzeptor stehen die Elektronen links vom Pfeil: Sie werden aufgenommen.`);
+ solved=true;fb={k:"ok",t:steps(t,ti)[s].done+`<br>${bal(t)}`};render();
+}
+function pick(i){
+ if(solved)return;
+ const c=steps(T[ti],ti)[s],o=c.opts[i];picked=i;
+ if(o.v===c.ok){solved=true;fb={k:"ok",t:c.done};render()}
+ else wrong(c.bad(o.v));
+}
+function moreHint(){hint=Math.min(3,hint+1);render()}
+function showSol(){
+ const t=T[ti],c=steps(t,ti)[s];err[ti][s]=true;solved=true;picked=null;
+ if(c.build){const {bank,exp}=setup(t,ti);sel=exp.map(id=>bank.findIndex(b=>b.id===id))}
+ fb={k:"ok",t:"Lösung: "+c.sol,sol:true};render();
+}
+function nextStep(){
+ const S=steps(T[ti],ti),c=S[s];
+ ans.push(fb&&fb.sol?c.sol:c.done.replace(/^Richtig: /,""));
+ s++;hint=0;solved=false;fb=null;picked=null;sel=[];
+ if(s>=S.length)over=true;
+ render();
+}
+function nextTask(){
+ ti++;s=0;hint=0;solved=false;fb=null;picked=null;ans=[];over=false;sel=[];
+ if(ti>=T.length)end=true;
+ render();window.scrollTo({top:document.getElementById("task").offsetTop-10});
+}
+function result(el){
+ let h=`<h2>Deine Auswertung</h2><p>So sicher bist du bei den vier Teilschritten:</p><table class="res">`;
+ SK.forEach((k,j)=>{
+  const n=err.filter(e=>e[j]).length,gr=n===0?"g":n===1?"y":"r",lab=n===0?"✓ sicher":n===1?"~ fast sicher":"! noch üben";
+  h+=`<tr><td><b>${k[0]}</b></td><td><span class="amp ${gr}">${lab}</span></td></tr>
+  <tr><td colspan="2" style="border-top:0;padding-top:0">${n===0?"Das kannst du schon.":`Webseite: Aufgaben dieses Bausteins noch einmal üben <button onclick="restart()" style="min-height:32px;padding:2px 10px">Noch einmal</button><br>Arbeitsblatt: ${k[1]}`}</td></tr>`;
+ });
+ h+=`</table><p class="note">Du hast alle Bausteine zur Ionenbildung durchgearbeitet. Mache jetzt den <a href="wissenscheck.html">Wissenscheck</a>.</p><div class="row"><button class="main" onclick="restart()">Noch einmal beginnen</button></div>`;
+ el.innerHTML=h;
+}
+function restart(){ti=0;s=0;hint=0;solved=false;fb=null;over=false;end=false;picked=null;ans=[];sel=[];err=T.map(()=>[false,false,false,false]);render()}
+render();
+</script>
+</body>
+</html>

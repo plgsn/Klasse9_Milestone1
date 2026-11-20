@@ -1,0 +1,18 @@
+Ionenbildung wiederholen - Schülerversion
+==========================================
+
+Inhalt dieses Ordners (alle Dateien müssen im selben Ordner bleiben):
+  index.html          Startseite (hier beginnen)
+  style.css           Gestaltung aller Seiten
+  baustein1.html ... baustein7.html
+  wissenscheck.html
+
+So öffnest du die Seite:
+  Doppelklick auf index.html. Die Seite öffnet sich im Browser.
+
+Hinweise:
+  - Für die Schriftart braucht der Browser Internet. Ohne Internet läuft die Seite
+    mit einer Ersatzschrift.
+  - Die Seite speichert nichts und braucht keine Anmeldung.
+  - Den Trickfilm in Baustein 1 lädt der Browser von einer externen Seite
+    (chemie-interaktiv.net). Dafür ist Internet nötig.

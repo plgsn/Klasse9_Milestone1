@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baustein 3: Atom oder Ion?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a> · <a href="wissenscheck.html">Wissenscheck</a></p>
+<h1>Baustein 3: Atom oder Ion?</h1>
+<p class="sub">Ich kann erklären, was ein Ion von einem Atom unterscheidet, und die Ladung eines Ions bestimmen.</p>
+
+<section class="card merke">
+<h2>Merke</h2>
+<p>Ein <b>Atom</b> ist elektrisch neutral: Es hat gleich viele p<sup>+</sup> wie e<sup>−</sup>.<br>
+Ein <b>Ion</b> ist ein elektrisch geladenes Teilchen: Die Zahl der p<sup>+</sup> ist ungleich der Zahl der e<sup>−</sup>.</p>
+<p><b>Ladung = Zahl der p<sup>+</sup> − Zahl der e<sup>−</sup></b></p>
+<p>Bei der Ionenbildung ändert sich nur die Hülle: Die Zahl der e<sup>−</sup> ändert sich, die Zahl der p<sup>+</sup> im Kern bleibt gleich.<br>
+Abgabe von e<sup>−</sup>: positiv geladenes Ion (<b>Kation</b>). Aufnahme von e<sup>−</sup>: negativ geladenes Ion (<b>Anion</b>).</p>
+<p class="sub">Merkhilfe: Das t in Kation sieht aus wie ein Pluszeichen. Vergleich: Eine Waage mit p<sup>+</sup> auf der einen und e<sup>−</sup> auf der anderen Seite. Beim Atom ist sie im Gleichgewicht, beim Ion kippt sie zur schwereren Seite.</p>
+</section>
+
+<details class="card" open>
+<summary>Beispiel vorgerechnet: Natrium</summary>
+<ol>
+<li>Natrium-Atom: 11 p<sup>+</sup> und 11 e<sup>−</sup>. Gleich viele, also <b>neutral</b>.</li>
+<li>Ein Teilchen mit 11 p<sup>+</sup> und 10 e<sup>−</sup>: unterschiedlich viele, also ein <b>Ion</b>.</li>
+<li>Ladung: 11 − 10 = +1, also <b>1+</b>.</li>
+<li>Positiv geladen: ein <b>Kation</b>. Es entstand durch <b>Abgabe von 1 e<sup>−</sup></b>. Die 11 p<sup>+</sup> im Kern blieben gleich.</li>
+</ol>
+<div class="pair" id="exfig"></div>
+</details>
+
+<section class="card" id="task"></section>
+<nav class="navbot"><a href="baustein2.html">← Baustein 2: Atombau und Valenzelektronen</a><a href="baustein4.html">Baustein 4: Warum werden Ionen gebildet? →</a></nav>
+</main>
+
+<script>
+const Z={Na:11,Cl:17,O:8,Al:13,F:9,S:16};
+const E="e<sup>−</sup>",P="p<sup>+</sup>",AMB="#e39b13";
+const cfg=n=>{const o=[];let r=n;for(const c of [2,8,8,18]){if(r<=0)break;const m=Math.min(c,r);o.push(m);r-=m}return o};
+const T=[["Natrium","Na",1],["Chlor","Cl",0],["Sauerstoff","O",-2],["Aluminium","Al",3],["Fluor","F",0],["Schwefel","S",-2]].map(([n,s,ch])=>({n,s,ch,z:Z[s],y:Z[s]-ch,k:Math.abs(ch)}));
+const SK=[
+ ["Atom und Ion unterscheiden","AB 2, AB 4 Aufgabe 1"],
+ ["Ladung über die Ladungsbilanz bestimmen","AB 2, AB 4 Aufgabe 1"],
+ ["Kation und Anion zuordnen","AB 2, AB 3 Aufgabe 1"],
+ ["Ionenbildung als Abgabe oder Aufnahme von "+E+" erklären","AB 2, AB 3 Aufgabe 1"]
+];
+const chl=c=>c===0?"0 (neutral)":`${Math.abs(c)}${c>0?"+":"−"}`;
+const ion=t=>`${t.s}<sup>${t.k>1?t.k:""}${t.ch>0?"+":"−"}</sup>`;
+const nums=a=>a.map(v=>({l:chl(v),v}));
+const rot=(a,i)=>a.map((_,j)=>a[(j+i)%a.length]);
+
+function fig(z,e,o={}){
+ const sh=cfg(e),ns=sh.length,cx=85,cy=85;
+ let h=`<circle cx="${cx}" cy="${cy}" r="18" fill="var(--pro)"/><text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const rad=30+16*i,last=i===ns-1,gh=last&&o.ghost?o.ghost:0,m=n+gh,dsh=last&&o.dash;
+  h+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${dsh?AMB:"var(--mut)"}" stroke-opacity="${dsh?1:.45}" stroke-width="${dsh?2.5:1.5}" ${dsh?'stroke-dasharray="5 4"':""}/>`;
+  for(let j=0;j<m;j++){
+   const a=-Math.PI/2+j*2*Math.PI/m+(i%2?Math.PI/m:0),x=(cx+rad*Math.cos(a)).toFixed(1),y=(cy+rad*Math.sin(a)).toFixed(1);
+   if(j<n){const hi=last&&o.hi&&j>=n-o.hi;h+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${hi?AMB:"var(--ele)"}" stroke="var(--card)" stroke-width="1"/>`}
+   else h+=`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+  }
+ });
+ return `<figure><svg viewBox="0 0 170 170" role="img" aria-label="Schalenmodell"><title>Schalenmodell</title>${h}</svg><figcaption>${o.cap||""}</figcaption></figure>`;
+}
+const atomFig=(t,cap)=>fig(t.z,t.z,t.ch>0?{hi:t.k,dash:1,cap}:{ghost:t.k,cap});
+const ionFig=(t,cap)=>fig(t.z,t.y,{hi:t.ch<0?t.k:0,cap});
+function dots(t){
+ const d=(n,c,x)=>Array.from({length:n},()=>`<span class="d ${c}">${x}</span>`).join("");
+ return `<p class="lbl">Teilchen:</p><div class="dots">${d(t.z,"p",P)}</div><div class="dots">${d(t.y,"e",E)}</div>`;
+}
+function waage(t,show){
+ const a=show?Math.min(16,5*Math.abs(t.ch)):0,r=a*Math.PI/180,d=100*Math.sin(r),dx=100*Math.cos(r),sg=t.ch>0?1:-1;
+ const yL=60+sg*d,yR=60-sg*d,xL=140-dx,xR=140+dx,f=v=>v.toFixed(1);
+ const pan=(x,y,c,tx)=>`<line x1="${f(x)}" y1="${f(y)}" x2="${f(x-26)}" y2="${f(y+34)}" stroke="var(--mut)"/><line x1="${f(x)}" y1="${f(y)}" x2="${f(x+26)}" y2="${f(y+34)}" stroke="var(--mut)"/><rect x="${f(x-38)}" y="${f(y+34)}" width="76" height="26" rx="6" fill="${c}"/><text x="${f(x)}" y="${f(y+52)}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">${tx}</text>`;
+ return `<svg class="wg" viewBox="0 0 280 170" role="img" aria-label="Waage mit Protonen und Elektronen"><title>Waage</title><line x1="140" y1="60" x2="140" y2="158" stroke="var(--mut)" stroke-width="3"/><line x1="100" y1="158" x2="180" y2="158" stroke="var(--mut)" stroke-width="4"/><line x1="${f(xL)}" y1="${f(yL)}" x2="${f(xR)}" y2="${f(yR)}" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>${pan(xL,yL,"var(--pro)",t.z+" p⁺")}${pan(xR,yR,"var(--ele)",t.y+" e⁻")}</svg><p class="note">${t.ch===0?`Die Waage ist im Gleichgewicht: gleich viele ${P} und ${E}.`:`Die schwerere Seite sinkt: Es überwiegen die ${t.ch>0?P:E}.`}</p>`;
+}
+
+function steps(t,i){
+ const z=t.z,y=t.y,ch=t.ch,io=ch!==0,k=t.k;
+ const S=[
+ {nm:"Atom oder Ion?",q:`Ein Teilchen des Elements ${t.n} hat ${z} ${P} und ${y} ${E}. Ist es ein Atom oder ein Ion?`,wide:true,opts:rot([{l:"Atom (neutral)",v:"a"},{l:"Ion (geladen)",v:"i"}],i),ok:io?"i":"a",
+  tips:[`Vergleiche die Zahl der ${P} mit der Zahl der ${E}.`,
+        `Ein Atom hat gleich viele ${P} und ${E} und ist neutral. Sind es unterschiedlich viele, ist das Teilchen geladen: ein Ion. Mit diesem Tipp erscheint die Waage.`,
+        `Beispiel Natrium: 11 ${P} und 11 ${E} ergeben ein neutrales Atom. Ein Teilchen mit 11 ${P} und 10 ${E} ist ein Ion.`],
+  sol:io?`${z} ${P} und ${y} ${E} sind unterschiedlich viele, also ist das Teilchen ein Ion.`:`${z} ${P} und ${y} ${E} sind gleich viele, also ist das Teilchen ein neutrales Atom.`,
+  bad:v=>v==="a"?`Ein Atom hat gleich viele ${P} und ${E}. Hier sind es ${z} und ${y}, also unterschiedlich viele.`:`Hier sind es gleich viele ${P} und ${E}. Das Teilchen ist neutral, also ein Atom.`,
+  done:io?`Richtig: Die Zahlen unterscheiden sich, es ist ein Ion.`:`Richtig: gleich viele ${P} und ${E}, also ein neutrales Atom.`},
+ {nm:"Ladung",q:`Welche Ladung hat das Teilchen? Stelle die Ladungsbilanz auf: Zahl der ${P} minus Zahl der ${E}.`,opts:nums([3,2,1,0,-1,-2,-3]),ok:ch,
+  tips:[`Die ${P} sind positiv, die ${E} negativ geladen. Die Ladung ergibt sich aus dem Überschuss.`,
+        `Rechne: ${z} − ${y}. Mit diesem Tipp erscheinen die Teilchen als Reihen.`,
+        `Beispiel Natrium: 11 ${P} und 10 ${E}. 11 − 10 = +1, also 1+. Rechne ebenso für ${t.n}.`],
+  sol:`${z} − ${y} = ${ch>0?"+":ch<0?"−":""}${Math.abs(ch)}. Die Ladung ist ${chl(ch)}.`,
+  bad:v=>(ch!==0&&v!==0&&Math.abs(v)===Math.abs(ch))?`Die Zahl stimmt, aber das Vorzeichen nicht. Hier überwiegen die ${ch>0?`${P}: positive Ladung`:`${E}: negative Ladung`}.`:`Die Zahl stimmt nicht. Rechne ${z} − ${y}.`,
+  done:`Richtig: Ladung ${chl(ch)}.`}
+ ];
+ if(io)S.push(
+ {nm:"Kation oder Anion?",q:`Das Ion hat die Ladung ${chl(ch)}. Wie nennt man ein solches Ion?`,wide:true,opts:rot([{l:"Kation (positiv geladenes Ion)",v:"k"},{l:"Anion (negativ geladenes Ion)",v:"a"}],i),ok:ch>0?"k":"a",
+  tips:[`Kationen sind positiv geladen, Anionen negativ.`,
+        `Merkhilfe: Das t in Kation sieht aus wie ein Pluszeichen. Mit diesem Tipp erscheint das Schalenmodell.`,
+        `Beispiel: Ein Ion mit der Ladung 1+ ist ein Kation, ein Ion mit der Ladung 1− ist ein Anion.`],
+  sol:`Die Ladung ist ${ch>0?"positiv: Kation":"negativ: Anion"}.`,
+  bad:()=>`Prüfe das Vorzeichen der Ladung: ${ch>0?"Plus bedeutet Kation":"Minus bedeutet Anion"}.`,
+  done:`Richtig: ${ch>0?"Kation":"Anion"}.`},
+ {nm:"Entstehung",q:`Wie ist das ${t.n}-Ion aus dem ${t.n}-Atom entstanden?`,wide:true,opts:rot([{l:`Abgabe von ${E}`,v:"de"},{l:`Aufnahme von ${E}`,v:"ae"},{l:`Abgabe von ${P}`,v:"dp"},{l:`Aufnahme von ${P}`,v:"ap"}],i),ok:ch>0?"de":"ae",
+  tips:[`Bei der Ionenbildung ändert sich nur die Hülle. Die Zahl der ${P} im Kern bleibt gleich.`,
+        `Vergleiche die Zahl der ${E} im Atom (${z}) mit der im Ion (${y}). Mit diesem Tipp erscheinen die Schalenmodelle von Atom und Ion.`,
+        `Beispiel Natrium: Das Atom hat 11 ${E}, das Ion 10 ${E}. Es wurde 1 ${E} abgegeben.`],
+  sol:`Das Atom hat ${z} ${E}, das Ion ${y} ${E}: ${ch>0?"Abgabe":"Aufnahme"} von ${k} ${E}.`,
+  bad:v=>(v==="dp"||v==="ap")?`Die ${P} sitzen im Atomkern und bleiben bei der Ionenbildung unverändert. Es ändert sich die Zahl der ${E} in der Hülle.`:`Vergleiche die Zahl der ${E} im Atom (${z}) mit der im Ion (${y}).`,
+  done:`Richtig: ${ch>0?"Abgabe":"Aufnahme"} von ${k} ${E}. Die ${z} ${P} im Kern bleiben gleich.`});
+ return S;
+}
+
+let ti=0,s=0,hint=0,solved=false,fb=null,over=false,end=false,picked=null,ans=[],err=T.map(t=>Array(t.ch?4:2).fill(false));
+
+function gfx(t){
+ const h1=hint>=1||solved,h2=hint>=2||solved;
+ if(s===0&&h2)return waage(t,true)+(t.ch?`<div class="pair">${fig(t.z,t.z,{cap:`${t.n}-Atom<br>${t.z} ${P}, ${t.z} ${E}`})}${fig(t.z,t.y,{cap:`Teilchen<br>${t.z} ${P}, ${t.y} ${E}`})}</div><p class="note">Der Kern ist gleich. Die Zahl der ${E} in der Hülle unterscheidet sich.</p>`:"");
+ if(s===1)return (h1?dots(t):"")+(h2?waage(t,true):"");
+ if(s===2&&h2)return `<div class="pair">${ionFig(t,`${ion(t)}<br>${t.ch>0?"Kation":"Anion"}`)}</div>`;
+ if(s===3&&h2)return `<div class="pair">${atomFig(t,`${t.n}-Atom<br>${t.z} ${E}`)}<div class="mid">→<small>${t.k} ${E} ${t.ch>0?"abgegeben":"aufgenommen"}</small></div>${ionFig(t,`${ion(t)}-Ion<br>${t.y} ${E}`)}</div><p class="note">Orange: ${t.ch>0?`Diese ${E} werden abgegeben.`:`Diese ${E} wurden aufgenommen.`} Der Kern mit ${t.z} ${P} bleibt unverändert.</p>`;
+ return "";
+}
+function render(){
+ const el=document.getElementById("task");
+ if(end)return result(el);
+ const t=T[ti],S=steps(t,ti);
+ let h=`<h2>Aufgabe ${ti+1} von ${T.length}: ${t.n}</h2><div class="chips">${S.map((x,i)=>`<span class="chip ${over||i<s?"done":i===s?"cur":""}">${x.nm}</span>`).join("")}</div>`;
+ ans.forEach(a=>h+=`<p class="recap">✓ ${a}</p>`);
+ if(over){
+  h+=t.ch?`<div class="fb ok"><b>Steckbrief: ${ion(t)}-Ion (${t.ch>0?"Kation":"Anion"})</b><div class="pair">${atomFig(t,`${t.n}-Atom`)}<div class="mid">→<small>${t.k} ${E} ${t.ch>0?"abgegeben":"aufgenommen"}</small></div>${ionFig(t,`${ion(t)}`)}</div><div class="fx">Atom: ${t.z} ${P} und ${t.z} ${E}<br>Ion: ${t.z} ${P} und ${t.y} ${E}<br>Ladung: ${chl(t.ch)}, ${t.ch>0?"positiv":"negativ"} geladen<br>Der Kern bleibt unverändert.</div></div>`
+   :`<div class="fb ok"><b>Steckbrief: ${t.n}-Atom</b><div class="pair">${fig(t.z,t.z,{})}<div class="fx">${t.z} ${P} und ${t.z} ${E}<br>Ladung: 0, das Atom ist neutral.</div></div></div>`;
+  h+=`<div class="row"><button class="main" onclick="nextTask()">${ti<T.length-1?"Nächste Aufgabe":"Auswertung ansehen"}</button></div>`;
+  el.innerHTML=h;return;
+ }
+ const c=S[s];
+ h+=`<p class="q">${c.q}</p>`+gfx(t);
+ h+=`<div class="opts ${c.wide?"w":""}">`+c.opts.map((o,i)=>{
+   const cl=solved&&o.v===c.ok?"right":(picked===i&&!solved&&o.v!==c.ok)?"wrong":"";
+   return `<button class="${cl}" ${solved?"disabled":""} onclick="pick(${i})">${o.l}</button>`}).join("")+"</div>";
+ if(fb)h+=`<div class="fb ${fb.k}">${fb.t}</div>`;
+ for(let i=0;i<hint;i++)h+=`<div class="tip"><b>Tipp ${i+1}:</b> ${c.tips[i]}</div>`;
+ h+='<div class="row">';
+ if(solved)h+=`<button class="main" onclick="nextStep()">${s<S.length-1?"Weiter":"Ergebnis ansehen"}</button>`;
+ else if(hint<3)h+=`<button onclick="moreHint()">Tipp anzeigen</button>`;
+ else h+=`<button onclick="showSol()">Lösung zeigen</button>`;
+ h+="</div>";
+ el.innerHTML=h;
+}
+function pick(i){
+ if(solved)return;
+ const c=steps(T[ti],ti)[s],o=c.opts[i];picked=i;
+ if(o.v===c.ok){solved=true;fb={k:"ok",t:c.done};}
+ else{err[ti][s]=true;hint=Math.min(3,hint+1);fb={k:"bad",t:"Fast. "+c.bad(o.v)};}
+ render();
+}
+function moreHint(){hint=Math.min(3,hint+1);render()}
+function showSol(){const c=steps(T[ti],ti)[s];err[ti][s]=true;solved=true;picked=null;fb={k:"ok",t:"Lösung: "+c.sol,sol:true};render()}
+function nextStep(){
+ const S=steps(T[ti],ti),c=S[s];
+ ans.push(fb&&fb.sol?c.sol:c.done.replace(/^Richtig: /,""));
+ s++;hint=0;solved=false;fb=null;picked=null;
+ if(s>=S.length)over=true;
+ render();
+}
+function nextTask(){
+ ti++;s=0;hint=0;solved=false;fb=null;picked=null;ans=[];over=false;
+ if(ti>=T.length)end=true;
+ render();window.scrollTo({top:document.getElementById("task").offsetTop-10});
+}
+function result(el){
+ let h=`<h2>Deine Auswertung</h2><p>So sicher bist du bei den vier Teilschritten:</p><table class="res">`;
+ SK.forEach((k,j)=>{
+  const n=err.filter(e=>e[j]).length,gr=n===0?"g":n===1?"y":"r",lab=n===0?"✓ sicher":n===1?"~ fast sicher":"! noch üben";
+  h+=`<tr><td><b>${k[0]}</b></td><td><span class="amp ${gr}">${lab}</span></td></tr>
+  <tr><td colspan="2" style="border-top:0;padding-top:0">${n===0?"Das kannst du schon.":`Webseite: Aufgaben dieses Bausteins noch einmal üben <button onclick="restart()" style="min-height:32px;padding:2px 10px">Noch einmal</button><br>Arbeitsblatt: ${k[1]}`}</td></tr>`;
+ });
+ h+=`</table><p class="note">Weiter geht es mit <a href="baustein4.html">Baustein 4: Warum werden Ionen gebildet?</a></p><div class="row"><button class="main" onclick="restart()">Noch einmal beginnen</button></div>`;
+ el.innerHTML=h;
+}
+function restart(){ti=0;s=0;hint=0;solved=false;fb=null;over=false;end=false;picked=null;ans=[];err=T.map(t=>Array(t.ch?4:2).fill(false));render()}
+{const t=T[0];document.getElementById("exfig").innerHTML=atomFig(t,"Natrium-Atom<br>11 p⁺, 11 e⁻")+`<div class="mid">→<small>1 e⁻ abgegeben</small></div>`+ionFig(t,"Natrium-Ion<br>11 p⁺, 10 e⁻")}
+render();
+</script>
+</body>
+</html>

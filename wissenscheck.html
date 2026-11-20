@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wissenscheck: Ionenbildung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>@media print{button,progress,.noprint{display:none}body{background:#fff;color:#000}.card{border:0}}</style>
+</head>
+<body>
+<main>
+<p class="navtop"><a href="index.html">← Startseite</a></p>
+<h1>Wissenscheck: Ionenbildung</h1>
+<p class="sub">Finde heraus, was du schon kannst und was du noch üben solltest.</p>
+
+<section class="card" id="app"></section>
+
+<section class="card noprint">
+<h2>Das Periodensystem (Hauptgruppen)</h2>
+<div class="scroll" id="pse"></div>
+<p class="note">Unter jedem Symbol steht die Ordnungszahl. Die Nebengruppen sind ausgeblendet. Du darfst das Periodensystem benutzen.</p>
+</section>
+</main>
+
+<script>
+const R=[["H","","","","","","","He"],["Li","Be","B","C","N","O","F","Ne"],["Na","Mg","Al","Si","P","S","Cl","Ar"],["K","Ca","Ga","Ge","As","Se","Br","Kr"]];
+const Z={H:1,He:2,Li:3,Be:4,B:5,C:6,N:7,O:8,F:9,Ne:10,Na:11,Mg:12,Al:13,Si:14,P:15,S:16,Cl:17,Ar:18,K:19,Ca:20,Ga:31,Ge:32,As:33,Se:34,Br:35,Kr:36};
+const RO=["I","II","III","IV","V","VI","VII","VIII"];
+const AMB="#e39b13";
+const cfg=n=>{const o=[];let r=n;for(const c of [2,8,8,18]){if(r<=0)break;const m=Math.min(c,r);o.push(m);r-=m}return o};
+const pos=(i,j,m)=>{const a=-Math.PI/2+j*2*Math.PI/m+(i%2?Math.PI/m:0),r=30+16*i;return[85+r*Math.cos(a),85+r*Math.sin(a)]};
+function fig(z,e,o={}){
+ const sh=cfg(e),ns=sh.length;
+ let h=`<circle cx="85" cy="85" r="18" fill="var(--pro)"/><text x="85" y="89" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${z}p⁺</text>`;
+ sh.forEach((n,i)=>{
+  const rad=30+16*i,lst=i===ns-1,gh=lst&&o.ghost?o.ghost:0,m=n+gh;
+  h+=`<circle cx="85" cy="85" r="${rad}" fill="none" stroke="var(--mut)" stroke-opacity=".45" stroke-width="1.5"/>`;
+  for(let j=0;j<m;j++){
+   const[x,y]=pos(i,j,m).map(v=>v.toFixed(1));
+   if(j<n)h+=`<circle cx="${x}" cy="${y}" r="5.5" fill="var(--ele)" stroke="var(--card)" stroke-width="1"/>`;
+   else h+=`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
+  }
+ });
+ return `<div class="pair"><figure><svg viewBox="0 0 170 170" role="img" aria-label="Schalenmodell"><title>Schalenmodell</title>${h}</svg><figcaption>${o.cap||""}</figcaption></figure></div>`;
+}
+
+const BAU={
+ 1:{n:"Einstieg Natrium und Chlor",u:"baustein1.html",ab:"AB 1, Aufgabe 1"},
+ 2:{n:"Atombau und Valenzelektronen",u:"baustein2.html",ab:"AB 4, Aufgabe 2 (Schalenbesetzung); sonst noch kein Arbeitsblatt"},
+ 3:{n:"Atom oder Ion?",u:"baustein3.html",ab:"AB 2; AB 4, Aufgabe 1"},
+ 4:{n:"Warum werden Ionen gebildet?",u:"baustein4.html",ab:"AB 3, Aufgabe 1; AB 4, Aufgabe 1"},
+ 5:{n:"Elektronen abgeben und aufnehmen im Modell",u:"baustein5.html",ab:"AB 3, Aufgabe 3; AB 4, Aufgabe 2"},
+ 6:{n:"Ionenladung mit dem PSE bestimmen",u:"baustein6.html",ab:"AB 3, Aufgabe 2; AB 4, Aufgabe 3"},
+ 7:{n:"Ionenformel, Teilgleichung und Wortgleichung",u:"baustein7.html",ab:"AB 4, Aufgabe 3 (Ionenformel); Teilgleichung und Wortgleichung: noch kein Arbeitsblatt"}
+};
+const FT={
+ V:{t:"Valenzelektronen, Hauptgruppe oder Schalen falsch bestimmt",b:[2]},
+ AI:{t:"Atom und Ion oder Protonen und Elektronen verwechselt",b:[3]},
+ VZ:{t:"Vorzeichen der Ladung falsch",b:[3,6]},
+ OT:{t:"Oktett, Duett oder Edelgaskonfiguration nicht richtig angewendet",b:[4]},
+ BG:{t:"Begründung der Ionenbildung falsch",b:[4]},
+ EG:{t:"Falsches Edelgas oder längeren Weg gewählt",b:[4,6]},
+ RI:{t:"Abgabe und Aufnahme oder Donator und Akzeptor vertauscht",b:[5]},
+ SM:{t:"Schalenmodell des Ions: Schalenzahl oder Protonenzahl falsch",b:[5]},
+ LZ:{t:"Zahl der Ladungen falsch gezählt",b:[6]},
+ FS:{t:"Schreibweise der Ionenformel falsch",b:[7]},
+ TG:{t:"Teilgleichung: Elektronen auf der falschen Seite oder falsche Zahl",b:[7]},
+ WG:{t:"Wortgleichung falsch aufgestellt",b:[7]}
+};
+const KO={
+ K1:{t:"Ich kann den Unterschied zwischen Atom und Ion erklären.",b:[3]},
+ K2:{t:"Ich kann die Oktettregel anwenden.",b:[4]},
+ K3:{t:"Ich kann die Bildung eines Ions erläutern (Donator-Akzeptor-Konzept).",b:[4,5]},
+ K4:{t:"Ich kann die Bildung eines Ions im Modell darstellen.",b:[5]},
+ K5:{t:"Ich kann Ionenladungen mit Hilfe des PSE bestimmen.",b:[2,6]},
+ K6:{t:"Ich kann Ionen in Formelschreibweise darstellen.",b:[7]},
+ K7:{t:"Ich kann die Ionenbildung als Teilgleichung und Wortgleichung darstellen.",b:[7]}
+};
+const Q=[
+ {k:"K1",q:"Ein Teilchen hat 17 p<sup>+</sup> und 18 e<sup>−</sup>. Was ist es?",o:[["Ein negativ geladenes Ion (Ladung 1−)","ok"],["Ein neutrales Atom","AI"],["Ein positiv geladenes Ion (Ladung 1+)","VZ"],["Ein Ion, dessen Kern 18 p<sup>+</sup> hat","AI"]]},
+ {k:"K1",q:"Was unterscheidet das Natrium-Ion (Na<sup>+</sup>) vom Natrium-Atom (11 p<sup>+</sup>, 11 e<sup>−</sup>)?",o:[["Es hat 1 e<sup>−</sup> weniger. Die Zahl der p<sup>+</sup> ist gleich.","ok"],["Es hat 1 p<sup>+</sup> weniger.","AI"],["Es hat 1 e<sup>−</sup> mehr.","VZ"],["Es hat gleich viele p<sup>+</sup> und e<sup>−</sup> wie das Atom.","AI"]]},
+ {k:"K2",q:"Wie viele e<sup>−</sup> hat die äußerste Schale des Magnesium-Ions Mg<sup>2+</sup> (Edelgaskonfiguration von Neon)?",o:[["8","ok"],["2","OT"],["10","V"],["6","OT"]]},
+ {k:"K2",q:"Wie viele e<sup>−</sup> hat die äußerste Schale des Lithium-Ions Li<sup>+</sup> (Edelgaskonfiguration von Helium)?",o:[["2","ok"],["8","OT"],["1","V"],["3","OT"]]},
+ {k:"K3",q:"Warum bildet Chlor das Chlorid-Ion Cl<sup>−</sup>?",o:[["Die äußerste Schale hat dann 8 e<sup>−</sup>: die Edelgaskonfiguration von Argon.","ok"],["Chlor gibt dabei 1 e<sup>−</sup> ab.","RI"],["Die Zahl der p<sup>+</sup> im Kern verändert sich.","AI"],["Atome wollen immer ein Ion sein.","BG"]]},
+ {k:"K3",q:"Magnesium bildet das Ion Mg<sup>2+</sup>. Welche Aussage ist richtig?",o:[["Magnesium ist der Donator und gibt 2 e<sup>−</sup> ab.","ok"],["Magnesium ist der Akzeptor und nimmt 2 e<sup>−</sup> auf.","RI"],["Magnesium ist der Donator und gibt 2 p<sup>+</sup> ab.","SM"],["Magnesium ist der Donator und gibt 1 e<sup>−</sup> ab.","LZ"]]},
+ {k:"K4",q:"Das Bild zeigt ein Natrium-Atom. Welche Beschreibung passt zum Natrium-Ion Na<sup>+</sup>?",f:()=>fig(11,11,{cap:"Natrium-Atom"}),o:[["2 Schalen, 11 p<sup>+</sup>, 10 e<sup>−</sup>","ok"],["3 Schalen, 11 p<sup>+</sup>, 10 e<sup>−</sup>","SM"],["2 Schalen, 10 p<sup>+</sup>, 10 e<sup>−</sup>","SM"],["3 Schalen, 11 p<sup>+</sup>, 11 e<sup>−</sup>","AI"]]},
+ {k:"K4",q:"Das Bild zeigt ein Sauerstoff-Atom (2 | 6). Es bildet das Oxid-Ion O<sup>2−</sup>. Wie sind die e<sup>−</sup> des Ions auf die Schalen verteilt?",f:()=>fig(8,8,{ghost:2,cap:"Sauerstoff-Atom"}),o:[["2 | 8","ok"],["2 | 6 | 2","SM"],["2 | 4","RI"],["2 | 7","LZ"]]},
+ {k:"K5",q:"Bestimme mit dem Periodensystem die Ladung des Aluminium-Ions (Al).",o:[["3+","ok"],["3−","VZ"],["5−","EG"],["4+","LZ"]]},
+ {k:"K5",q:"Bestimme mit dem Periodensystem die Ladung des Schwefel-Ions (S).",o:[["2−","ok"],["2+","VZ"],["6+","EG"],["3−","V"]]},
+ {k:"K6",q:"Wie schreibt man das Aluminium-Ion?",o:[["Al<sup>3+</sup>","ok"],["Al<sup>+3</sup>","FS"],["Al<sup>3−</sup>","VZ"],["Al<sup>+</sup>","LZ"]]},
+ {k:"K6",q:"Wie schreibt man das Fluorid-Ion (Fluor nimmt 1 e<sup>−</sup> auf)?",o:[["F<sup>−</sup>","ok"],["F<sup>1−</sup>","FS"],["F<sup>+</sup>","VZ"],["F<sup>2−</sup>","LZ"]]},
+ {k:"K7",q:"Welche Teilgleichung beschreibt die Bildung von Mg<sup>2+</sup>?",o:[["Mg → Mg<sup>2+</sup> + 2 e<sup>−</sup>","ok"],["Mg + 2 e<sup>−</sup> → Mg<sup>2+</sup>","TG"],["Mg → Mg<sup>2+</sup> + e<sup>−</sup>","TG"],["Mg → Mg<sup>2−</sup> + 2 e<sup>−</sup>","VZ"]]},
+ {k:"K7",q:"Wie lautet die Wortgleichung zur Bildung des Chlorid-Ions?",o:[["Chlor-Atom + Elektron → Chlorid-Ion","ok"],["Chlor-Atom → Chlorid-Ion + Elektron","WG"],["Chlor-Atom → Chlorid-Ion","WG"],["Chlor-Atom + Proton → Chlorid-Ion","WG"]]}
+];
+const ORD=[0,2,4,6,8,10,12,1,3,5,7,9,11,13];
+const rot=(a,i)=>a.map((_,j)=>a[(j+i)%a.length]);
+
+let st="start",i=0,pk=[];
+
+function pse(){
+ let h='<table class="pse"><tr><th></th>'+RO.map(r=>`<th>${r}</th>`).join("")+"</tr>";
+ R.forEach((row,r)=>{h+=`<tr><th class="pn">${r+1}</th>`+row.map((x,j)=>`<td class="${!x?"e0":j===7?"eg":""}">${x}<small>${x?Z[x]:""}</small></td>`).join("")+"</tr>"});
+ document.getElementById("pse").innerHTML=h+"</table>";
+}
+function render(){
+ const el=document.getElementById("app");
+ if(st==="start"){
+  el.innerHTML=`<h2>So funktioniert es</h2><p>Du beantwortest ${Q.length} Fragen zur Ionenbildung. Es gibt keine Tipps und keine Rückmeldung nach jeder Frage. Am Ende siehst du, was du schon kannst, was du noch üben solltest und wo du es üben kannst: auf der Webseite oder mit den Arbeitsblättern.</p><p class="sub">Benutze das Periodensystem unten auf der Seite.</p><div class="row"><button class="main" onclick="st='q';i=0;pk=[];render()">Los geht’s</button></div>`;return;
+ }
+ if(st==="q"){
+  const n=ORD[i],q=Q[n],opts=rot(q.o.map((o,j)=>({l:o[0],c:o[1],j})),n%4);
+  let h=`<h2>Frage ${i+1} von ${Q.length}</h2><progress max="${Q.length}" value="${i}" style="width:100%"></progress><p class="q">${q.q}</p>${q.f?q.f():""}<div class="opts w">`;
+  h+=opts.map(o=>`<button class="${pk[n]===o.j?"pick":""}" onclick="pk[${n}]=${o.j};render()">${o.l}</button>`).join("")+"</div>";
+  h+=`<div class="row"><button class="main" ${pk[n]===undefined?"disabled":""} onclick="${i<Q.length-1?"i++":"st='res'"};render();window.scrollTo(0,0)">${i<Q.length-1?"Weiter":"Auswertung ansehen"}</button></div>`;
+  el.innerHTML=h;return;
+ }
+ result(el);
+}
+function result(el){
+ const rows=Q.map((q,n)=>({n,k:q.k,ok:q.o[pk[n]][1]==="ok",code:q.o[pk[n]][1],got:q.o[pk[n]][0],right:q.o[0][0],q:q.q}));
+ const good=rows.filter(r=>r.ok).length,wr=rows.filter(r=>!r.ok);
+ let h=`<h2>Deine Auswertung</h2><p><b>${good} von ${Q.length}</b> Fragen richtig.</p><table class="res">`;
+ Object.keys(KO).forEach(k=>{
+  const rs=rows.filter(r=>r.k===k),c=rs.filter(r=>r.ok).length,g=c===rs.length?"g":c===0?"r":"y",lab=g==="g"?"✓ sicher":g==="y"?"~ fast sicher":"! noch üben";
+  const bs=[...new Set(rs.filter(r=>!r.ok).flatMap(r=>FT[r.code].b))].sort((a,b)=>a-b);
+  h+=`<tr><td><b>${KO[k].t}</b>${g==="g"?"":`<br><span class="sub">Üben: ${(bs.length?bs:KO[k].b).map(b=>"Baustein "+b).join(", ")}</span>`}</td><td><span class="amp ${g}">${lab}</span><br><span class="sub">${c} von ${rs.length}</span></td></tr>`;
+ });
+ h+="</table>";
+ if(!wr.length){
+  h+=`<div class="fb ok"><b>Sehr gut!</b> Du hast alle Fragen richtig beantwortet und kannst alle Kompetenzen zur Ionenbildung.</div>`;
+ }else{
+  const need={};
+  wr.forEach(r=>FT[r.code].b.forEach(b=>{(need[b]=need[b]||new Set()).add(r.code)}));
+  const bl=Object.keys(need).map(Number).sort((a,b)=>a-b);
+  h+=`<h2 style="margin-top:18px">Dein Lernplan</h2><p>Beginne beim ersten Baustein in der Liste. Die späteren bauen darauf auf.</p>`;
+  bl.forEach((b,j)=>{
+   h+=`<div class="plan"><p><b>${j===0?"Beginne hier: ":""}Baustein ${b}: ${BAU[b].n}</b></p><p class="sub">Dazu passt: ${[...need[b]].map(c=>FT[c].t).join("; ")}.</p>
+   <p><a class="btnlink" href="${BAU[b].u}" target="_blank" rel="noopener">Auf der Webseite üben</a></p><p class="sub">Oder mit dem Arbeitsblatt: ${BAU[b].ab}</p></div>`;
+  });
+  h+=`<details class="card"><summary>Das war nicht richtig (${wr.length})</summary><ul class="wl">`+wr.map(r=>`<li><b>${r.q}</b><br>Du hast gewählt: ${r.got}<br>Richtig ist: ${r.right}<br><span class="sub">Fehlertyp: ${FT[r.code].t} (Baustein ${FT[r.code].b.join(" und ")})</span></li>`).join("")+"</ul></details>";
+ }
+ h+=`<div class="row"><button class="main" onclick="st='start';render()">Noch einmal beginnen</button><button onclick="window.print()">Auswertung drucken</button></div>`;
+ el.innerHTML=h;
+}
+pse();render();
+</script>
+</body>
+</html>
